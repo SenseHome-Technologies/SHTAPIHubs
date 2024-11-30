@@ -12,7 +12,7 @@ const Hub = db.define('Hub', {
         type: DataTypes.STRING(255),
         allowNull: false,
     },
-    discoveryFlag: {
+    discoveryflag: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false,

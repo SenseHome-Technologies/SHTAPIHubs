@@ -2,16 +2,17 @@
 const { DataTypes } = require('sequelize');
 const db = require('./config');
 
-const UserHub = db.define('UserHub', {
-    userId: {
-        type: DataTypes.UUID,
-        allowNull: false,
-        references: {
-            model: 'users',
-            key: 'id',
-        },
+const UserHub = db.define('User', {
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
     },
-    hubId: {
+    email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    hubid: {
         type: DataTypes.UUID,
         allowNull: false,
         references: {
@@ -24,7 +25,7 @@ const UserHub = db.define('UserHub', {
         defaultValue: 'Admin',
     },
 }, {
-    tableName: 'userhubs',
+    tableName: 'users',
     timestamps: false,
 });
 
