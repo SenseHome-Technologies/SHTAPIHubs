@@ -12,19 +12,19 @@ const Device = db.define('Device', {
         type: DataTypes.STRING(255),
         allowNull: false,
     },
-    accessCode: {
+    accesscode: {
         type: DataTypes.STRING(255),
         allowNull: false,
     },
     state: {
-        type: DataTypes.BOOLEAN,
+        type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: false,
+        defaultValue: 0,
     },
     favorite: {
-        type: DataTypes.BOOLEAN,
+        type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: false,
+        defaultValue: 0,
     },
     value: {
         type: DataTypes.FLOAT,
@@ -37,7 +37,7 @@ const Device = db.define('Device', {
             key: 'id',
         },
     },
-    hubId: {
+    hubid: {
         type: DataTypes.UUID,
         allowNull: false,
         references: {
@@ -45,7 +45,7 @@ const Device = db.define('Device', {
             key: 'id',
         },
     },
-    divisionId: {
+    divisionid: {
         type: DataTypes.INTEGER,
         references: {
             model: 'divisions',

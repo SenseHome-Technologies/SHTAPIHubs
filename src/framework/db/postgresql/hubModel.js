@@ -13,9 +13,9 @@ const Hub = db.define('Hub', {
         allowNull: false,
     },
     discoveryflag: {
-        type: DataTypes.BOOLEAN,
+        type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: false,
+        defaultValue: 0
     },
     role: {
         type: DataTypes.ENUM('Hub'),

@@ -29,6 +29,7 @@ app.use(bodyParser.json());
 
 // Routes
 app.use('/api', require('./controllers/routes/hubRoute'));
+app.use('/api', require('./controllers/routes/deviceRoute'));
 
 // Swagger UI
 //app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
