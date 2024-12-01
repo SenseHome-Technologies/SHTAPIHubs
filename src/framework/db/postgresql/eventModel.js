@@ -13,9 +13,9 @@ const Event = db.define('Event', {
         allowNull: false,
     },
     state: {
-        type: DataTypes.BOOLEAN,
+        type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: false,
+        defaultValue: 0,
     },
     type: {
         type: DataTypes.INTEGER,
@@ -25,7 +25,7 @@ const Event = db.define('Event', {
             key: 'id',
         },
     },
-    hubId: {
+    hubid: {
         type: DataTypes.UUID,
         allowNull: false,
         references: {

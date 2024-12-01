@@ -14,11 +14,11 @@ router.route('/device/add').post(
         // Extract token from request headers
         const token = req.headers['token'];
         // Extract deviceid from the request body
-        const {id} = req.body;
+        const {hubid} = req.body;
 
         try {
             // Use deviceInteractorPostgres to attempt add with the provided deviceid
-            const device = await deviceInteractorPostgres.add({deviceAddPersistence}, {token, id});
+            const device = await deviceInteractorPostgres.add({deviceAddPersistence}, {token, hubid});
             // Send the response with the status and device data
             res.status(device.status).send(device);
         } catch (err) {
@@ -80,11 +80,11 @@ router.route('/device/getall').get(
         // Extract token from request headers
         const token = req.headers['token'];
         // Extract deviceid from the request body
-        const {id} = req.body;
+        const {hubid} = req.body;
 
         try {
             // Use deviceInteractorPostgres to attempt get with the provided hubid
-            const device = await deviceInteractorPostgres.getall({deviceGetPersistence}, {token, id});
+            const device = await deviceInteractorPostgres.getall({deviceGetPersistence}, {token, hubid});
             // Send the response with the status and device data
             res.status(device.status).send(device);
         } catch (err) {

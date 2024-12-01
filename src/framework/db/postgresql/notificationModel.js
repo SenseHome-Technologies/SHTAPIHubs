@@ -16,7 +16,7 @@ const Notification = db.define('Notification', {
         type: DataTypes.DATE,
         allowNull: false,
     },
-    hubId: {
+    hubid: {
         type: DataTypes.UUID,
         allowNull: false,
         references: {

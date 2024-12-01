@@ -8,7 +8,7 @@ const History = db.define('History', {
         autoIncrement: true,
         primaryKey: true,
     },
-    deviceId: {
+    deviceid: {
         type: DataTypes.UUID,
         allowNull: false,
         references: {
@@ -16,7 +16,7 @@ const History = db.define('History', {
             key: 'id',
         },
     },
-    deviceValue: {
+    devicevalue: {
         type: DataTypes.FLOAT,
         allowNull: false,
     },

@@ -35,13 +35,13 @@ exports.add = async ({hubAddPersistence}, {token, id}) => {
             return { status: 400, message: 'Hub ID is required'};
         }
 
-        // Attempt to persist hub login and retrieve result
+        // Attempt to persist hub add and retrieve result
         const result = await hubAddPersistence(token, hub);
 
-        // Return the login result
+        // Return the add result
         return result;
     } catch (err) {
-        // Log any errors that occur during the login process
+        // Log any errors that occur during the process
         console.error(err);
         // Rethrow the error to be handled by the caller
         throw err;
@@ -50,13 +50,13 @@ exports.add = async ({hubAddPersistence}, {token, id}) => {
 
 exports.get = async ({hubGetPersistence}, {token}) => {
     try {
-        // Attempt to persist hub login and retrieve result
+        // Attempt to persist hub get and retrieve result
         const result = await hubGetPersistence(token);
 
-        // Return the login result
+        // Return the get result
         return result;
     } catch (err) {
-        // Log any errors that occur during the login process
+        // Log any errors that occur during the process
         console.error(err);
         // Rethrow the error to be handled by the caller
         throw err;
@@ -73,13 +73,13 @@ exports.edit = async ({hubEditPersistence}, {token, id, name, users}) => {
             return { status: 400, message: 'Hub ID, name and users are required' };
         }
 
-        // Attempt to persist hub login and retrieve result
+        // Attempt to persist hub edit and retrieve result
         const result = await hubEditPersistence(token, hub);
 
-        // Return the login result
+        // Return the edit result
         return result;
     } catch (err) {
-        // Log any errors that occur during the login process
+        // Log any errors that occur during the process
         console.error(err);
         // Rethrow the error to be handled by the caller
         throw err;
@@ -96,13 +96,13 @@ exports.delete = async ({hubDeletePersistence}, {token, id, type}) => {
             return { status: 400, message: 'Hub ID and type are required' };
         }
 
-        // Attempt to persist hub login and retrieve result
+        // Attempt to persist hub delete and retrieve result
         const result = await hubDeletePersistence(token, hub);
 
-        // Return the login result
+        // Return the delete result
         return result;
     } catch (err) {
-        // Log any errors that occur during the login process
+        // Log any errors that occur during the process
         console.error(err);
         // Rethrow the error to be handled by the caller
         throw err;
