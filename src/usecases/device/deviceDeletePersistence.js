@@ -7,6 +7,11 @@ exports.deviceEditPersistence = async (token, device) => {
         // Verify the token using JWT
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
+        // Verify permissions of token
+        if (decoded.role !== 'User') {
+            return { status: 400, message: 'You are not authorized to delete this device' };
+        }
+
         // Get the device based on the id
         const deviceRecord = await Device.findByPk(device.id);
 

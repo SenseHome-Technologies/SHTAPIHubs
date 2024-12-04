@@ -12,10 +12,8 @@ exports.EventTargetEntity = class EventTargetEntity {
     }
 
     async validate(type) {
-        if (type !== "create") {
-            if (!this.eventid) {
-                return { status: 400, message: 'Event target must have eventid' };
-            }
+        if (type !== "create" && !this.eventid) {
+            return { status: 400, message: 'Event target must have eventid' };
         }
 
         if (!this.devicestate) {
@@ -30,13 +28,12 @@ exports.EventTargetEntity = class EventTargetEntity {
             return { status: 400, message: 'Event target must have devicetype' };
         }
 
-        for (const condition of this.eventconditions) {
-            var validate = await condition.validate(type);
-            if (validate.status !== 200) {
-                return validate;
-            }
+        const conditionValidation = await Promise.all(this.eventconditions.map(condition => condition.validate(type)));
+        const invalidConditions = conditionValidation.filter(validation => validation.status !== 200);
+        if (invalidConditions.length) {
+            return invalidConditions[0];
         }
 
         return { status: 200 };
     }
-};
+}

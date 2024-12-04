@@ -13,10 +13,8 @@ exports.EventConditionEntity = class EventConditionEntity {
     }
 
     async validate(type) {
-        if (type !== "create") {
-            if (!this.eventtargetid) {
-                return { status: 400, message: 'Event condition must have eventtargetid' };
-            }
+        if (type !== "create" && !this.eventtargetid) {
+            return { status: 400, message: 'Event condition must have eventtargetid' };
         }
 
         if (!this.devicestate || !this.operatorid || !this.operatorquantity) {

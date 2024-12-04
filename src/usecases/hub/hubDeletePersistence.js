@@ -7,6 +7,11 @@ exports.hubDeletePersistence = async (token, hub) => {
         // Verify the token using JWT
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
+        // Verify permissions of token
+        if (decoded.role !== 'User') {
+            return { status: 400, message: 'You are not authorized to delete this hub' };
+        }
+
         // Find the hub based on the id
         const hubRecord = await Hub.findByPk(hub.id);
 

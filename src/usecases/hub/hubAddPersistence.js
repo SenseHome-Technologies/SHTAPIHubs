@@ -2,13 +2,18 @@ const jwt = require('jsonwebtoken');
 const Hub = require('../../framework/db/postgresql/hubModel');
 const User = require('../../framework/db/postgresql/userModel');
 
-exports.hubAddPersistence = async (token, hub) => {
+exports.hubAddPersistence = async (token, user) => {
     try {
         // Verify the token using JWT
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
+        // Verify userid with decoded email
+        if (decoded.email !== user.email || decoded.role !== 'User') {
+            return { status: 401, message: 'Unauthorized' };
+        }
+
         // Find the hub based on the id
-        const hubRecord = await Hub.findByPk(hub.id);
+        const hubRecord = await Hub.findByPk(user.hubid);
 
         // Validate if hub exists
         if (!hubRecord) {

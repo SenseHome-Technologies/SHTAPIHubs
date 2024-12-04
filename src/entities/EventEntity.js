@@ -21,11 +21,10 @@ exports.EventEntity = class EventEntity {
             return { status: 400, message: 'Event must have at least one event target' };
         }
 
-        for (const target of this.eventtargets) {
-            var validate = await target.validate(type);
-            if (validate.status !== 200) {
-                return validate;
-            }
+        const targetValidation = await Promise.all(this.eventtargets.map(target => target.validate(type)));
+        const invalidTargets = targetValidation.filter(validation => validation.status !== 200);
+        if (invalidTargets.length) {
+            return invalidTargets[0];
         }
 
         if (parseInt(this.type) === 2) {
@@ -33,14 +32,13 @@ exports.EventEntity = class EventEntity {
                 return { status: 400, message: 'Event type 2 requires at least one schedule' };
             }
 
-            for (const schedule of this.schedules) {
-                var validate = await schedule.validate(type);
-                if (validate.status !== 200) {
-                    return validate;
-                }
+            const scheduleValidation = await Promise.all(this.schedules.map(schedule => schedule.validate(type)));
+            const invalidSchedules = scheduleValidation.filter(validation => validation.status !== 200);
+            if (invalidSchedules.length) {
+                return invalidSchedules[0];
             }
         }
 
         return { status: 200 };
     }
-};
+}

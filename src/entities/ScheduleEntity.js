@@ -7,10 +7,7 @@ exports.ScheduleEntity = class ScheduleEntity {
 
     async validate() {
         if (!this.hour || !this.weekday) {
-            return {
-                status: 400,
-                message: 'Schedule hour and weekday are required'
-            };
+            return { status: 400, message: 'Schedule hour and weekday are required' };
         }
 
         return { status: 200 };

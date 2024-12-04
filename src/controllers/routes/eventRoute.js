@@ -13,11 +13,11 @@ router.route('/event/create').post(
         // Extract token from request headers
         const token = req.headers['token'];
         // Extract eventid from the request body
-        const {name, type, hubid, eventtargets, schedules} = req.body;
+        const {name, type, state, hubid, eventtargets, schedules} = req.body;
 
         try {
             // Use eventInteractorPostgres to attempt add with the provided eventid
-            const event = await eventInteractorPostgres.create({eventCreatePersistence}, {token, name, type, hubid, eventtargets, schedules});
+            const event = await eventInteractorPostgres.create({eventCreatePersistence}, {token, name, type, state, hubid, eventtargets, schedules});
             // Send the response with the status and event data
             res.status(event.status).send(event);
         } catch (err) {
@@ -79,11 +79,11 @@ router.route('/event/edit').put(
         // Extract token from request headers
         const token = req.headers['token'];
         // Extract eventid from the request body
-        const {id, name, state, eventstargets, schedules} = req.body;
+        const {id, name, type, state, hubid, eventtargets, schedules} = req.body;
 
         try {
             // Use eventInteractorPostgres to attempt edit with the provided data
-            const event = await eventInteractorPostgres.edit({eventEditPersistence}, {token, id, name, state, eventstargets, schedules});
+            const event = await eventInteractorPostgres.edit({eventEditPersistence}, {token, id, name, type, state, hubid, eventtargets, schedules});
             // Send the response with the status and event data
             res.status(event.status).send(event);
         } catch (err) {

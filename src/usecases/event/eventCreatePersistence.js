@@ -15,15 +15,19 @@ exports.eventCreatePersistence = async (token, event) => {
         // Verify the token using JWT
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
+        // Verify permissions of token
+        if (decoded.role !== 'User') {
+            return { status: 400, message: 'You are not authorized to create events' };
+        }
+
         // Get User and validate user permissions
         const userRecord = await User.findOne({
-            where: { email: decoded.email, hubid: event.hubid },
-            transaction
+            where: { email: decoded.email, hubid: event.hubid }
         });
 
         // Validate if user exists and is authorized
         if (!userRecord) {
-            return { status: 400, message: 'User not found' };
+            return { status: 400, message: 'No hub found for this user' };
         }
 
         // Verify if User is Admin
@@ -35,6 +39,7 @@ exports.eventCreatePersistence = async (token, event) => {
         const eventRecord = await Event.create({
             name: event.name,
             type: event.type,
+            state: event.state ? 1 : 0,
             hubid: event.hubid
         }, { transaction });
 
@@ -65,8 +70,10 @@ exports.eventCreatePersistence = async (token, event) => {
         }
 
         if (event.schedules.length) {
+            // Get all schedules
             const schedules = await Schedule.findAll();
 
+            // Create a new ScheduleEvent entry for each schedule
             for (const schedule of event.schedules) {
                 var scheduleRecord = schedules.find(s => s.hour === schedule.hour && s.weekday === schedule.weekday);
 

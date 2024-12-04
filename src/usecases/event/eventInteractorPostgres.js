@@ -6,7 +6,7 @@ const {EventEntity} = require('../../entities/EventEntity');
 exports.create = async ({eventCreatePersistence}, {token, name, type, hubid, eventtargets, schedules}) => {
     try {
         // Create a new EventEntity with provided eventid
-        const event = new EventEntity({name, type, hubid, eventtargets, schedules});
+        const event = new EventEntity({name, type, hubid, state, eventtargets, schedules});
 
         // Validate the event
         const validate = (await event.validate("create"));
@@ -55,6 +55,10 @@ exports.getall = async ({eventGetPersistence}, {token, hubid}) => {
         // Create a new HubEntity with provided hubid
         const hub = new HubEntity({id: hubid});
 
+        if (!hubid) {
+            return { status: 400, message: 'Hub ID is required' };
+        }
+
         // Attempt to persist event get and retrieve result
         const result = await eventGetPersistence.getall(token, hub);
 
@@ -68,14 +72,17 @@ exports.getall = async ({eventGetPersistence}, {token, hubid}) => {
     }
 }
 
-exports.edit = async ({eventEditPersistence}, {token, id, name, state, eventstargets, schedules}) => {
+exports.edit = async ({eventEditPersistence}, {token, id, name, type, state, hubid, eventtargets, schedules}) => {
     try {
         // Create a new EventEntity with provided data
-        const event = new EventEntity({id, name, state, eventstargets, schedules});
+        const event = new EventEntity({id, name, type, state, hubid, eventtargets, schedules});
+
+        console.log(event);
 
         // Validate the event
-        if (!id, !name, !eventstargets) {
-            return { status: 400, message: 'Event ID, name and eventstargets are required' };
+        const validate = (await event.validate("edit"));
+        if (validate.status !== 200) {
+            return validate;
         }
 
         // Attempt to persist event edit and retrieve result
