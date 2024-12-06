@@ -1,5 +1,5 @@
 const Division = require('../../framework/db/postgresql/divisionModel'); 
-const { validateAdminAccess } = require('../util/tokenUtils');
+const validateAdminAccess = require('../util/tokenUtils');
 const { DivisionEntity } = require('../../entities/DivisionEntity'); 
 
 exports.divisionEditPersistence = async (token, divisionData) => {

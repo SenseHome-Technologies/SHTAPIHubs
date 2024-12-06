@@ -4,11 +4,7 @@ const Hub = require('../../framework/db/postgresql/hubModel');
 
 exports.notificationCreatePersistence = async (token, notification) => {
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-        if (decoded.role !== 'Admin') {
-            return { status: 403, message: 'Unauthorized' };
-        }
+        await validateUserAccess(token, hubId);
 
         const hub = await Hub.findByPk(notification.hubId);
         if (!hub) {

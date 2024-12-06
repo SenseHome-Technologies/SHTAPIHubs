@@ -1,6 +1,5 @@
 const Division = require('../../framework/db/postgresql/divisionModel'); 
-// const Device = require('../../framework/db/postgresql/deviceModel');
-const { validateAdminAccess } = require('../util/tokenUtils');
+const validateAdminAccess  = require('../util/tokenUtils');
 const { DivisionEntity } = require('../../entities/DivisionEntity'); 
 
 exports.divisionCreatePersistence = async (token, hubId, divisionData) => {

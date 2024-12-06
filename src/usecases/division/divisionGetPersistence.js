@@ -1,6 +1,6 @@
 const Division = require('../../framework/db/postgresql/divisionModel'); 
 const Device = require('../../framework/db/postgresql/deviceModel'); 
-const { validateUserAccess } = require('../util/tokenUtils');
+const validateUserAccess = require('../util/tokenUtils');
 const { DivisionEntity } = require('../../entities/DivisionEntity'); // For domain logic mapping
 exports.divisionGetPersistence = async (token, hubId) => {
     try {

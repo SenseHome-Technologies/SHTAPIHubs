@@ -1,5 +1,5 @@
-const { validateAdminAccess } = require('../util/tokenUtils');
-const Division = require('../../framework/db/postgresql/divisionModel'); 
+const Division = require('../../framework/db/postgresql/divisionModel');
+const validateAdminAccess = require('../util/tokenUtils');
 
 exports.divisionDeletePersistence = async (token, hubId, name) => {
     try {   
