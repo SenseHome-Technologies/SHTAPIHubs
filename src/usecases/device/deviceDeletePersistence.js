@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../../framework/db/postgresql/userModel');
 const Device = require('../../framework/db/postgresql/deviceModel');
 
-exports.deviceEditPersistence = async (token, device) => {
+exports.deviceDeletePersistence = async (token, device) => {
     try {
         // Verify the token using JWT
         const decoded = jwt.verify(token, process.env.JWT_SECRET);

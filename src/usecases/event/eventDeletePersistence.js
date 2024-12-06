@@ -27,7 +27,7 @@ exports.eventDeletePersistence = async (token, event) => {
 
         // Get User and validate user permissions
         const userRecord = await User.findOne({
-            where: { email: decoded.email, hubid: eventRecord.id }
+            where: { email: decoded.email, hubid: eventRecord.hubid }
         });
 
         // Validate if user exists and is authorized

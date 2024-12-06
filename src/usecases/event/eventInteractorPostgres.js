@@ -3,7 +3,7 @@
 const {HubEntity} = require('../../entities/HubEntity');
 const {EventEntity} = require('../../entities/EventEntity');
 
-exports.create = async ({eventCreatePersistence}, {token, name, type, hubid, eventtargets, schedules}) => {
+exports.create = async ({eventCreatePersistence}, {token, name, type, state, hubid, eventtargets, schedules}) => {
     try {
         // Create a new EventEntity with provided eventid
         const event = new EventEntity({name, type, hubid, state, eventtargets, schedules});
@@ -76,8 +76,6 @@ exports.edit = async ({eventEditPersistence}, {token, id, name, type, state, hub
     try {
         // Create a new EventEntity with provided data
         const event = new EventEntity({id, name, type, state, hubid, eventtargets, schedules});
-
-        console.log(event);
 
         // Validate the event
         const validate = (await event.validate("edit"));

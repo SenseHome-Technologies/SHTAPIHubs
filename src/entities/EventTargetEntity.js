@@ -16,7 +16,7 @@ exports.EventTargetEntity = class EventTargetEntity {
             return { status: 400, message: 'Event target must have eventid' };
         }
 
-        if (!this.devicestate) {
+        if (this.devicestate === undefined) {
             return { status: 400, message: 'Event target must have devicestate' };
         }
 

@@ -8,8 +8,8 @@ exports.EventConditionEntity = class EventConditionEntity {
         this.devicevalue = eventcondition.devicevalue;
         this.operatorid = eventcondition.operatorid;
         this.operatorquantity = eventcondition.operatorquantity;
-        this.statmentid = eventcondition.statmentid;
-        this.statmentquantity = eventcondition.statmentquantity;
+        this.statementid = eventcondition.statementid;
+        this.statementquantity = eventcondition.statementquantity;
     }
 
     async validate(type) {
@@ -17,7 +17,7 @@ exports.EventConditionEntity = class EventConditionEntity {
             return { status: 400, message: 'Event condition must have eventtargetid' };
         }
 
-        if (!this.devicestate || !this.operatorid || !this.operatorquantity) {
+        if (this.devicestate === undefined || !this.operatorid || !this.operatorquantity) {
             return { status: 400, message: 'Event condition must have devicestate, operatorid and operatorquantity' };
         }
 
@@ -25,8 +25,8 @@ exports.EventConditionEntity = class EventConditionEntity {
             return { status: 400, message: 'Event condition must have deviceid or devicetype' };
         }
 
-        if (!this.deviceid && this.devicetype && !this.statmentid && !this.statmentquantity) {
-            return { status: 400, message: 'Event condition must have statmentid and statmentquantity' };
+        if (!this.deviceid && this.devicetype && !this.statementid && !this.statementquantity) {
+            return { status: 400, message: 'Event condition must have statementid and statmentquantity' };
         }
 
         if (this.deviceid && !this.devicetype) {

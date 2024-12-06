@@ -14,6 +14,8 @@ exports.get = async (token, device) => {
             return { status: 400, message: 'Device not found' };
         }
 
+        deviceRecord.devicetype
+
          // Respond with success message
         return { status: 200, message: "Device found", data: deviceRecord };
 
@@ -57,7 +59,7 @@ exports.getall = async (token, hub) => {
 
         // Get all devices for the hub
         const devices = await Device.findAll({
-            where: { hubid: hubId }
+            where: { hubid: hub.id }
         });
 
          // Respond with success message

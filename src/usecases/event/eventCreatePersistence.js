@@ -63,8 +63,8 @@ exports.eventCreatePersistence = async (token, event) => {
                     devicevalue: condition.devicevalue,
                     operatorid: condition.operatorid,
                     operatorquantity: condition.operatorquantity,
-                    statmentid: condition.statmentid,
-                    statmentquantity: condition.statmentquantity
+                    statementid: condition.statementid,
+                    statementquantity: condition.statementquantity
                 }, { transaction });
             }
         }

@@ -77,6 +77,11 @@ exports.getall = async ({deviceGetPersistence}, {token, hubid}) => {
         // Create a new HubEntity with provided hubid
         const hub = new HubEntity({id: hubid});
 
+        // Validate the device
+        if (!hubid) {
+            return { status: 400, message: 'Hub ID is required' };
+        }
+
         // Attempt to persist device get and retrieve result
         const result = await deviceGetPersistence.getall(token, hub);
 
