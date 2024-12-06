@@ -30,6 +30,7 @@ exports.hubDeletePersistence = async (token, hub) => {
             return { status: 400, message: 'Hub not found for this user' };
         }
 
+        // Delete the hub
         if (hub.type === 'all' && userRecord.role === 'Admin') {
             // Delete all users in the hub
             await User.destroy({
