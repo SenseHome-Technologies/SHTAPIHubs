@@ -3,7 +3,12 @@ const { DataTypes } = require('sequelize');
 const db = require('./config');
 
 const ScheduleEvent = db.define('ScheduleEvent', {
-    scheduleId: {
+    id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+    },
+    scheduleid: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
@@ -11,7 +16,7 @@ const ScheduleEvent = db.define('ScheduleEvent', {
             key: 'id',
         },
     },
-    eventId: {
+    eventid: {
         type: DataTypes.UUID,
         allowNull: false,
         references: {

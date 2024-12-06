@@ -1,5 +1,6 @@
 'use strict';
 
+const {UserEntity} = require('../../entities/UserEntity');
 const {HubEntity} = require('../../entities/HubEntity');
 
 exports.login = async ({hubLoginPersistence}, {id}) => {
@@ -25,7 +26,31 @@ exports.login = async ({hubLoginPersistence}, {id}) => {
     }
 }
 
-exports.add = async ({hubAddPersistence}, {token, id}) => {
+exports.add = async ({hubAddPersistence}, {token, id, email}) => {
+    try {
+        // Create a new UserEntity with provided hubid and user email
+        const user = new UserEntity({hubid: id, email});
+
+        // Validate the user
+        const validation = await user.validate('create');
+        if (validation.status !== 200) {
+            return validation;
+        }
+
+        // Attempt to persist hub add and retrieve result
+        const result = await hubAddPersistence(token, user);
+
+        // Return the add result
+        return result;
+    } catch (err) {
+        // Log any errors that occur during the process
+        console.error(err);
+        // Rethrow the error to be handled by the caller
+        throw err;
+    }
+}
+
+exports.get = async ({hubGetPersistence}, {token, id}) => {
     try {
         // Create a new HubEntity with provided hubid
         const hub = new HubEntity({id});
@@ -35,28 +60,36 @@ exports.add = async ({hubAddPersistence}, {token, id}) => {
             return { status: 400, message: 'Hub ID is required'};
         }
 
-        // Attempt to persist hub login and retrieve result
-        const result = await hubAddPersistence(token, hub);
+        // Attempt to persist hub get and retrieve result
+        const result = await hubGetPersistence.get(token, hub);
 
-        // Return the login result
+        // Return the get result
         return result;
     } catch (err) {
-        // Log any errors that occur during the login process
+        // Log any errors that occur during the process
         console.error(err);
         // Rethrow the error to be handled by the caller
         throw err;
     }
 }
 
-exports.get = async ({hubGetPersistence}, {token}) => {
+exports.getall = async ({hubGetPersistence}, {token, email}) => {
     try {
-        // Attempt to persist hub login and retrieve result
-        const result = await hubGetPersistence(token);
+        // Create a new UserEntity with provided userid
+        const user = new UserEntity({email});
 
-        // Return the login result
+        // Validate the hub
+        if (!email) {
+            return { status: 400, message: 'User email is required'};
+        }
+
+        // Attempt to persist hub getall and retrieve result
+        const result = await hubGetPersistence.getall(token, user);
+
+        // Return the get result
         return result;
     } catch (err) {
-        // Log any errors that occur during the login process
+        // Log any errors that occur during the process
         console.error(err);
         // Rethrow the error to be handled by the caller
         throw err;
@@ -69,17 +102,18 @@ exports.edit = async ({hubEditPersistence}, {token, id, name, users}) => {
         const hub = new HubEntity({id, name, users});
 
         // Validate the hub
-        if (!id, !name, !users) {
-            return { status: 400, message: 'Hub ID, name and users are required' };
+        const validation = await hub.validate();
+        if (validation.status !== 200) {
+            return validation;
         }
 
-        // Attempt to persist hub login and retrieve result
+        // Attempt to persist hub edit and retrieve result
         const result = await hubEditPersistence(token, hub);
 
-        // Return the login result
+        // Return the edit result
         return result;
     } catch (err) {
-        // Log any errors that occur during the login process
+        // Log any errors that occur during the process
         console.error(err);
         // Rethrow the error to be handled by the caller
         throw err;
@@ -96,13 +130,13 @@ exports.delete = async ({hubDeletePersistence}, {token, id, type}) => {
             return { status: 400, message: 'Hub ID and type are required' };
         }
 
-        // Attempt to persist hub login and retrieve result
+        // Attempt to persist hub delete and retrieve result
         const result = await hubDeletePersistence(token, hub);
 
-        // Return the login result
+        // Return the delete result
         return result;
     } catch (err) {
-        // Log any errors that occur during the login process
+        // Log any errors that occur during the process
         console.error(err);
         // Rethrow the error to be handled by the caller
         throw err;

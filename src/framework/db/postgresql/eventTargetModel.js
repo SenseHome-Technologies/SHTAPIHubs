@@ -8,7 +8,7 @@ const EventTarget = db.define('EventTarget', {
         autoIncrement: true,
         primaryKey: true,
     },
-    eventId: {
+    eventid: {
         type: DataTypes.UUID,
         allowNull: false,
         references: {
@@ -16,26 +16,26 @@ const EventTarget = db.define('EventTarget', {
             key: 'id',
         },
     },
-    deviceId: {
+    deviceid: {
         type: DataTypes.UUID,
         references: {
             model: 'devices',
             key: 'id',
         },
     },
-    deviceType: {
+    devicetype: {
         type: DataTypes.INTEGER,
         references: {
             model: 'devicetypes',
             key: 'id',
         },
     },
-    deviceState: {
-        type: DataTypes.BOOLEAN,
+    devicestate: {
+        type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: false,
+        defaultValue: 0,
     },
-    deviceValue: {
+    devicevalue: {
         type: DataTypes.INTEGER,
     },
 }, {

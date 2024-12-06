@@ -8,7 +8,7 @@ const EventCondition = db.define('EventCondition', {
         autoIncrement: true,
         primaryKey: true,
     },
-    eventTargetId: {
+    eventtargetid: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
@@ -16,46 +16,46 @@ const EventCondition = db.define('EventCondition', {
             key: 'id',
         },
     },
-    deviceId: {
+    deviceid: {
         type: DataTypes.UUID,
         references: {
             model: 'devices',
             key: 'id',
         },
     },
-    deviceType: {
+    devicetype: {
         type: DataTypes.INTEGER,
         references: {
             model: 'devicetypes',
             key: 'id',
         },
     },
-    deviceState: {
-        type: DataTypes.BOOLEAN,
+    devicestate: {
+        type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: false,
+        defaultValue: 0,
     },
-    deviceValue: {
+    devicevalue: {
         type: DataTypes.INTEGER,
     },
-    operatorId: {
+    operatorid: {
         type: DataTypes.INTEGER,
         references: {
             model: 'operators',
             key: 'id',
         },
     },
-    operatorQuantity: {
+    operatorquantity: {
         type: DataTypes.INTEGER,
     },
-    statementId: {
+    statementid: {
         type: DataTypes.INTEGER,
         references: {
             model: 'statements',
             key: 'id',
         },
     },
-    statementQuantity: {
+    statementquantity: {
         type: DataTypes.INTEGER,
     },
 }, {
