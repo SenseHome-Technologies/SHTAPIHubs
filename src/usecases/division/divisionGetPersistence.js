@@ -1,53 +1,36 @@
-const jwt = require('jsonwebtoken');
 const Division = require('../../framework/db/postgresql/divisionModel'); 
 const Device = require('../../framework/db/postgresql/deviceModel'); 
-const User = require('../../framework/db/postgresql/userModel'); 
+const { validateUserAccess } = require('../util/tokenUtils');
 const { DivisionEntity } = require('../../entities/DivisionEntity'); // For domain logic mapping
-
 exports.divisionGetPersistence = async (token, hubId) => {
     try {
-        // Verify the token
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        await validateUserAccess(token, hubId);
 
-        // Verify user role
-        if (!decoded.role) {
-            return { status: 400, message: 'User role not defined.' };
-        }
-
-        // Check if user has access to the hub
-        if (decoded.role !== 'Admin') {
-            const userRecord = await User.findOne({
-                where: { email: decoded.email, hubId: hubId }
-            });
-
-            if (!userRecord) {
-                return { status: 404, message: 'User does not have access to this hub.' };
-            }
-        }
-
-        // Get all devices associated with the hub to find related divisions
+        // Get all devices for the hub
         const devices = await Device.findAll({
             where: { hubId: hubId },
             include: {
-                model: Division,  // Join Division to get the divisions related to the devices
-                attributes: ['id', 'name', 'icon'],  // Only fetch required attributes
-                required: true  // Ensure only devices linked to divisions are fetched
+                model: Division,
+                attributes: ['id', 'name', 'icon'],
+                required: true
             }
         });
 
-        // Handle if no devices (and therefore no divisions) are found
         if (devices.length === 0) {
             return { status: 404, message: 'No divisions found for this hub.' };
         }
 
-        // Extract the divisions (one division per device)
+        // Deduplicate divisions
         const divisions = devices.map(device => device.Division);
+        const uniqueDivisions = Array.from(new Map(
+            divisions.map(div => [div.id, div]) // Use Map to deduplicate by division ID
+        ).values());
 
-        // Map to DivisionEntities and return
-        const divisionEntities = divisions.map(division => new DivisionEntity({
+        // Map to DivisionEntity and return
+        const divisionEntities = uniqueDivisions.map(division => new DivisionEntity({
             id: division.id,
             name: division.name,
-            icon: division.icon,
+            icon: division.icon
         }));
 
         return { status: 200, message: 'Divisions retrieved successfully.', data: divisionEntities };
