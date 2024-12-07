@@ -3,12 +3,12 @@ const jwt = require('jsonwebtoken'); // Import jsonwebtoken for token verificati
 const User = require('../../framework/db/postgresql/userModel'); // Import User model from database
 const Device = require('../../framework/db/postgresql/deviceModel'); // Import Device model from database
 const Division = require('../../framework/db/postgresql/divisionModel'); // Import Division model from database
-const { validateUserAccess } = require('./util/tokenUtil');
+const { validateAccess } = require('./util/tokenUtil');
 
 exports.divisionGetPersistence = async (token, hub) => {
     try {
         // Validate user access (token and hubid)
-        const userAccess = await validateUserAccess(token, hub.hubid);
+        const userAccess = await validateAccess("User", token, hub.id);
 
         if (userAccess.status !== 200) {
             return userAccess; // If user validation fails, return the error response

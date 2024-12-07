@@ -3,14 +3,14 @@ const db = require('../../framework/db/postgresql/config');
 const User = require('../../framework/db/postgresql/userModel'); // Import User model from database
 const Device = require('../../framework/db/postgresql/deviceModel'); // Import Device model from database
 const Division = require('../../framework/db/postgresql/divisionModel'); // Import Division model from database
-const { validateAdminAccess } = require('./util/tokenUtil');
+const { validateAccess } = require('./util/tokenUtil');
 
 
 exports.divisionDeletePersistence = async (token, division) => {
     const transaction = await db.transaction();
     try {   
         // Validate user access (token and hubid)
-        const userAccess = await validateAdminAccess(token, division.hubid);
+        const userAccess = await validateAccess("Admin", token, division.hubid);
 
         if (userAccess.status !== 200) {
             return userAccess; // If user validation fails, return the error response
