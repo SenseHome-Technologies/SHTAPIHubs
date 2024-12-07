@@ -8,7 +8,7 @@ const { validateUserAccess } = require('./util/tokenUtil');
 exports.divisionGetPersistence = async (token, hub) => {
     try {
         // Validate user access (token and hubid)
-        const userAccess = await validateUserAccess(token, division.hubid);
+        const userAccess = await validateUserAccess(token, hub.hubid);
 
         if (userAccess.status !== 200) {
             return userAccess; // If user validation fails, return the error response
