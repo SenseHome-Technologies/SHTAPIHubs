@@ -6,22 +6,11 @@ const Division = require('../../framework/db/postgresql/divisionModel'); // Impo
 
 exports.divisionGetPersistence = async (token, hub) => {
     try {
-        // Verify the provided token to ensure it's valid
-        const decode = jwt.verify(token, process.env.JWT_SECRET);
+        // Validate user access (token and hubid)
+        const userAccess = await validateUserAccess(token, division.hubid);
 
-        // Check if the user role is 'User'
-        if (decode.role !== 'User') {
-            return { status: 400, message: 'Only Users can get divisions' };
-        }
-
-        // Get userRecord from database
-        const userRecord = await User.findOne({
-            where: { email: decode.email, hubid: hub.id }
-        });
-
-        // Validate if user exists and is authorized
-        if (!userRecord) {
-            return { status: 400, message: 'No hub found for this user' };
+        if (userAccess.status !== 200) {
+            return userAccess; // If user validation fails, return the error response
         }
 
         // Get all devices for the hub

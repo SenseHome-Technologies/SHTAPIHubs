@@ -10,6 +10,7 @@ exports.create = async ({ divisionCreatePersistence }, { token, name, icon, hubi
 
         // Validate the division
         const validationResult = await division.validate('create');
+
         if (validationResult.status !== 200) {
             return validationResult;
         }
@@ -32,6 +33,7 @@ exports.delete = async ({ divisionDeletePersistence }, { token, id, hubid }) => 
 
         // Check if the id is present
         const validationResult = await division.validate('delete');
+
         if (validationResult.status !== 200) {
             return validationResult;
         }
@@ -54,6 +56,7 @@ exports.edit = async ({ divisionEditPersistence }, { token, id, name, icon, hubi
 
         // Validate the division
         const validationResult = await division.validate('edit');
+
         if (validationResult.status !== 200) {
             return validationResult;
         }
@@ -76,6 +79,7 @@ exports.get = async ({ divisionGetPersistence }, { token, hubid }) => {
 
         // Validate the hub ID
         const validationResult = hubid ? { status: 200 } : { status: 400, message: 'Hub ID is required' };
+        
         if (validationResult.status !== 200) {
             return validationResult;
         }
