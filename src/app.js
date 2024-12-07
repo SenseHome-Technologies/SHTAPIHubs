@@ -33,6 +33,7 @@ app.use('/api', require('./controllers/routes/deviceRoute'));
 app.use('/api', require('./controllers/routes/divisionRoute')); 
 app.use('/api', require('./controllers/routes/notificationRoute'));
 app.use('/api', require('./controllers/routes/eventRoute'));
+app.use('/api', require('./controllers/routes/historyRoute'));
 app.use('/api', require('./controllers/routes/typesRoute'));
 
 // Swagger UI

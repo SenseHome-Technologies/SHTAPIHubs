@@ -31,7 +31,7 @@ exports.notificationCreatePersistence = async (token, notification) => {
         });
 
         // Return success status and the created notification
-        return { status: 200, message: 'Notification created', notification: newNotification };
+        return { status: 200, message: 'Notification created', data: newNotification };
     } catch (err) {
         // Return error status and message in case of failure
         return { status: 500, message: err.message };
