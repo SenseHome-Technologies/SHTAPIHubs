@@ -46,37 +46,33 @@ router.route('/division/create').post(
 );
 
 /**
- * @api {get} /api/division/get Get a division
- * @apiName GetDivision
+ * @api {delete} /api/division/delete Delete a division
+ * @apiName DeleteDivision
  * @apiGroup Division
- * @apiDescription Retrieve a division by its ID
+ * @apiDescription Delete a division by its ID
  *
  * @apiHeader {String} token The user's token
- * @apiParam {String} hubid The ID of the division to retrieve
+ * @apiParam {String} id The ID of the division to delete
+ * @apiParam {String} hubid The ID of the hub the division belongs to
  *
- * @apiSuccess {Object} division The retrieved division
- * @apiSuccess {Number} division.status The status of the division
- * @apiSuccess {String} division.message The message of the division
+ * @apiSuccess {Object} division The division
+ * @apiSuccess {Number} division.status The status of the delete operation
+ * @apiSuccess {String} division.message The message of the delete operation
  */
-router.route('/division/get').get(
-    /**
-     * Get a division by its ID
-     *
-     * @param {Object} req The request object
-     * @param {Object} res The response object
-     */
+router.route('/division/delete').delete(
     async (req, res) => {
+        // Extract token from request headers
         const token = req.headers['token'];
-        const { hubid } = req.body;
+        // Extract divisionid from the request body
+        const { id, hubid } = req.body;
 
         try {
-            // Attempt to get the division with the provided hubid
-            const division = await divisionInteractorPostgres.get({ divisionGetPersistence }, { token, hubid });
-
+            // Use divisionInteractorPostgres to attempt delete with the provided divisionid
+            const division = await divisionInteractorPostgres.delete({ divisionDeletePersistence }, { token, id, hubid });
             // Send the response with the status and division data
             res.status(division.status).send(division);
         } catch (err) {
-            // Log any errors that occur during the get process
+            // Log any errors that occur during the delete process
             console.log(err);
             // Rethrow the error to be handled by the caller
             throw err;
@@ -123,33 +119,37 @@ router.route('/division/edit').put(
 );
 
 /**
- * @api {delete} /api/division/delete Delete a division
- * @apiName DeleteDivision
+ * @api {get} /api/division/get Get a division
+ * @apiName GetDivision
  * @apiGroup Division
- * @apiDescription Delete a division by its ID
+ * @apiDescription Retrieve a division by its ID
  *
  * @apiHeader {String} token The user's token
- * @apiParam {String} id The ID of the division to delete
- * @apiParam {String} hubid The ID of the hub the division belongs to
+ * @apiParam {String} hubid The ID of the division to retrieve
  *
- * @apiSuccess {Object} division The division
- * @apiSuccess {Number} division.status The status of the delete operation
- * @apiSuccess {String} division.message The message of the delete operation
+ * @apiSuccess {Object} division The retrieved division
+ * @apiSuccess {Number} division.status The status of the division
+ * @apiSuccess {String} division.message The message of the division
  */
-router.route('/division/delete').delete(
+router.route('/division/get').get(
+    /**
+     * Get a division by its ID
+     *
+     * @param {Object} req The request object
+     * @param {Object} res The response object
+     */
     async (req, res) => {
-        // Extract token from request headers
         const token = req.headers['token'];
-        // Extract divisionid from the request body
-        const { id, hubid } = req.body;
+        const { hubid } = req.body;
 
         try {
-            // Use divisionInteractorPostgres to attempt delete with the provided divisionid
-            const division = await divisionInteractorPostgres.delete({ divisionDeletePersistence }, { token, id, hubid });
+            // Attempt to get the division with the provided hubid
+            const division = await divisionInteractorPostgres.get({ divisionGetPersistence }, { token, hubid });
+
             // Send the response with the status and division data
             res.status(division.status).send(division);
         } catch (err) {
-            // Log any errors that occur during the delete process
+            // Log any errors that occur during the get process
             console.log(err);
             // Rethrow the error to be handled by the caller
             throw err;
