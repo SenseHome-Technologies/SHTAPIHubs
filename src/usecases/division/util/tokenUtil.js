@@ -27,11 +27,6 @@ exports.validateUserAccess = async (token, hubid) => {
             return { status: 404, message: 'User not found' };
         }
 
-        // Validate role is 'User'
-        if (userRecord.role !== 'User') {
-            return { status: 403, message: 'Only Users can perform this action' };
-        }
-
         return { status: 200, message: 'Access validated', user: userRecord };
     } catch (error) {
         return { status: 401, message: 'Invalid token or access denied' };
