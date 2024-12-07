@@ -13,6 +13,10 @@ exports.validateUserAccess = async (token, hubid) => {
         // Decode the token
         const decode = jwt.verify(token, process.env.JWT_SECRET);
 
+        if (decode.role !== 'User') {
+            return { status: 400, message: 'Only users can create Notifications' };
+        }
+
         // Check if user exists and has same hubid as division
         const userRecord = await User.findOne({
             where: { email: decode.email, hubid: hubid }
@@ -45,6 +49,10 @@ exports.validateAdminAccess = async (token, hubid) => {
     try {
         // Decode the token
         const decode = jwt.verify(token, process.env.JWT_SECRET);
+
+        if (decode.role !== 'Admin') {
+            return { status: 400, message: 'Only users can create Notifications' };
+        }
 
         // Check if user exists and has same hubid as division
         const userRecord = await User.findOne({
