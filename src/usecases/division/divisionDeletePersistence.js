@@ -8,7 +8,7 @@ const { validateAccess } = require('./util/tokenUtil');
 
 exports.divisionDeletePersistence = async (token, division) => {
     const transaction = await db.transaction();
-    try {   
+    try {
         // Validate user access (token and hubid)
         const userAccess = await validateAccess("Admin", token, division.hubid);
 
@@ -41,7 +41,7 @@ exports.divisionDeletePersistence = async (token, division) => {
         );
 
         // Delete the division
-        await existingDivision.destroy({transaction});
+        await existingDivision.destroy({ transaction });
 
         // Commit the transaction
         await transaction.commit();

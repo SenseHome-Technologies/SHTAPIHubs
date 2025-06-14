@@ -46,10 +46,14 @@ exports.get = async ({ notificationGetPersistence }, { token, hubid }) => {
     }
 };
 
-exports.getall = async ({ notificationGetPersistence }, { token }) => {
+exports.getall = async ({ notificationGetPersistence }, { token, page, limit, date }) => {
     try {
+        limit = parseInt(limit) || 10;
+        page = parseInt(page) || 1;
+        date = date || 'date';
+
         // Attempt to retrieve all notifications
-        const result = await notificationGetPersistence.getall(token);
+        const result = await notificationGetPersistence.getall(token, page, limit, date);
 
         // Return the result
         return result;

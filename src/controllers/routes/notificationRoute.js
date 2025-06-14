@@ -6,7 +6,7 @@ const { notificationDeletePersistence } = require('../../usecases/notifications/
 const router = require('express').Router();
 
 /**
- * @api {post} /api/notification/create Create a notification
+ * @api {post} /api/notifications Create a notification
  * @apiName CreateNotification
  * @apiGroup Notification
  * @apiDescription Create a new notification
@@ -20,7 +20,7 @@ const router = require('express').Router();
  * @apiSuccess {Number} notification.status The status of the notification
  * @apiSuccess {String} notification.message The message of the notification
  */
-router.route('/notification/create').post(
+router.route('/notifications').post(
     // Asynchronous function to handle notification creation
     async (req, res) => {
         // Extract token from request headers
@@ -48,7 +48,7 @@ router.route('/notification/create').post(
 );
 
 /**
- * @api {get} /api/notification/get Get all notifications for a hub
+ * @api {get} /api/notifications/:hubid Get all notifications for a hub
  * @apiName GetAllNotifications
  * @apiGroup Notification
  * @apiDescription Retrieve all notifications for a hub by its ID
@@ -60,13 +60,13 @@ router.route('/notification/create').post(
  * @apiSuccess {Number} notifications.status The status of the notifications
  * @apiSuccess {String} notifications.message The message of the notifications
  */
-router.route('/notification/get').get(
+router.route('/notifications/:hubid').get(
     // Asynchronous function to handle the notification get request
     async (req, res) => {
         // Get token from request headers
         const token = req.headers['token'];
         // Get hubid from request body
-        const { hubid } = req.body;
+        const { hubid } = req.params;
 
         try {
             // Retrieve notifications for the given hubid
@@ -83,7 +83,7 @@ router.route('/notification/get').get(
 );
 
 /**
- * @api {get} /api/notification/get Get all notifications for a hub
+ * @api {get} /api/notification Get all notifications for a hub
  * @apiName GetAllNotifications
  * @apiGroup Notification
  * @apiDescription Retrieve all notifications for a hub by its ID
@@ -94,15 +94,16 @@ router.route('/notification/get').get(
  * @apiSuccess {Number} notifications.status The status of the notifications
  * @apiSuccess {String} notifications.message The message of the notifications
  */
-router.route('/notification/getall').get(
+router.route('/notifications').get(
     // Asynchronous function to handle the notification get request
     async (req, res) => {
         // Get token from request headers
         const token = req.headers['token'];
+        const { page, limit, date } = req.query;
 
         try {
             // Retrieve notifications for the given hubid
-            const notifications = await notificationInteractorPostgres.getall({ notificationGetPersistence }, { token });
+            const notifications = await notificationInteractorPostgres.getall({ notificationGetPersistence }, { token, page, limit, date });
             // Send response with status and notifications data
             res.status(notifications.status).send(notifications);
         } catch (err) {
@@ -115,7 +116,7 @@ router.route('/notification/getall').get(
 );
 
 /**
- * @api {delete} /api/notification/delete Delete a notification
+ * @api {delete} /api/notifications/:id Delete a notification
  * @apiName DeleteNotification
  * @apiGroup Notification
  * @apiDescription Delete a notification by its ID
@@ -128,10 +129,11 @@ router.route('/notification/getall').get(
  * @apiSuccess {Number} notification.status The status of the delete operation
  * @apiSuccess {String} notification.message The message of the delete operation
  */
-router.route('/notification/delete').delete(
+router.route('/notifications/:id').delete(
     async (req, res) => {
         const token = req.headers['token'];
-        const { id, hubid } = req.body;
+        const { id } = req.params;
+        const { hubid } = req.body;
 
         try {
             // Delete the notification and retrieve the result

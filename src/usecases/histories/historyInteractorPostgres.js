@@ -25,7 +25,7 @@ exports.create = async ({ historyCreatePersistence }, { token, deviceid, devicev
     }
 };
 
-exports.get = async ({ historyGetPersistence }, { token, hubid }) => {
+exports.get = async ({ historyGetPersistence }, { token, hubid, page, limit }) => {
     try {
         // Create a new historyEntity with provided ID
         const history = new HistoryEntity({ hubid });
@@ -35,8 +35,11 @@ exports.get = async ({ historyGetPersistence }, { token, hubid }) => {
             return { status: 400, message: 'hub ID is required' };
         }
 
+        limit = parseInt(limit) || 10;
+        page = parseInt(page) || 1;
+
         // Attempt to retrieve the history
-        const result = await historyGetPersistence(token, history);
+        const result = await historyGetPersistence(token, history, page, limit);
 
         // Return the result
         return result;

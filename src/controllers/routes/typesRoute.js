@@ -4,7 +4,7 @@ const typesGetPersistence = require('../../usecases/types/typesGetPersistence');
 const router = require('express').Router();
 
 /**
- * @api {get} /api/devicetypes/get Get all device types
+ * @api {get} /api/devicetypes Get all device types
  * @apiName GetDeviceTypes
  * @apiGroup Types
  * @apiDescription Retrieve all available device types
@@ -14,12 +14,12 @@ const router = require('express').Router();
  * @apiSuccess {String} response.message The message of the response
  * @apiSuccess {Array} response.data The list of device types
  */
-router.route('/devicetypes/get').get(
+router.route('/devicetypes').get(
     // Define an asynchronous function to handle the get route
     async (req, res) => {
         try {
             // Use typesInteractorPostgres to attempt get
-            const result = await typesInteractorPostgres.getdevicetypes({typesGetPersistence});
+            const result = await typesInteractorPostgres.getdevicetypes({ typesGetPersistence });
             // Send the response with the status and data
             res.status(result.status).send(result);
         } catch (err) {

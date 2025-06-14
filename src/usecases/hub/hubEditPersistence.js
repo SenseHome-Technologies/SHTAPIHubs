@@ -30,7 +30,7 @@ exports.hubEditPersistence = async (token, hub) => {
             return { status: 400, message: 'Hub not found for this user' };
         }
         if (userRecord.role !== 'Admin') {
-            return { status: 400, message: 'You are not authorized to edit this hub'};
+            return { status: 400, message: 'You are not authorized to edit this hub' };
         }
 
         // Find all users in the hub
@@ -38,7 +38,7 @@ exports.hubEditPersistence = async (token, hub) => {
             where: { hubid: hubRecord.id }
         });
 
-        
+
         const existingUserMap = new Map(
             existingUsers.map(user => [user.email, { id: user.id, role: user.role }])
         );

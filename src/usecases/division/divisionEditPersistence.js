@@ -22,7 +22,7 @@ exports.divisionEditPersistence = async (token, division) => {
                 where: { hubid: division.hubid }
             }
         })
-        
+
         // Validate if the division exists
         if (!existingDivision) {
             return { status: 400, message: 'Division not found.' };
@@ -36,13 +36,13 @@ exports.divisionEditPersistence = async (token, division) => {
             return { status: 404, message: 'Division not found.' };
         }
 
-        await divisionRecord.update({
+        var result = await divisionRecord.update({
             name: division.name,
             icon: division.icon
         });
 
         // Return success response
-        return { status: 200, message: 'Division updated successfully.', data: divisionRecord };
+        return { status: 200, message: 'Division updated successfully.', data: result };
     } catch (error) {
         console.error(error);
         return { status: 500, message: error.message };

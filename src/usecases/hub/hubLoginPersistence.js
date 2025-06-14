@@ -12,7 +12,7 @@ exports.hubLoginPersistence = async (hub) => {
         }
 
         // Generate a JWT token for the hub
-        const token = jwt.sign({id: hubRecord.id, role: 'Hub'}, process.env.JWT_SECRET, {expiresIn: '1d'});
+        const token = jwt.sign({ id: hubRecord.id, role: 'Hub' }, process.env.JWT_SECRET, { expiresIn: '1d' });
 
         // Return success response with token
         return { status: 200, message: 'Hub logged in successfully', token: token };

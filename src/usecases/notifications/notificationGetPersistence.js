@@ -35,7 +35,10 @@ exports.get = async (token, notification) => {
     }
 };
 
-exports.getall = async (token) => {
+exports.getall = async (token, page, limit, date) => {
+    const start = (page - 1) * limit;
+    const end = page * limit;
+
     try {
         // Verify the provided token to ensure it's valid
         const decode = jwt.verify(token, process.env.JWT_SECRET);
@@ -59,13 +62,24 @@ exports.getall = async (token) => {
             return { status: 404, message: 'No hubs found for the user' };
         }
 
-        // Fetch notifications for all associated hub IDs
+        // Fetch and sort notifications
         const notifications = await Notification.findAll({
             where: { hubid: hubIds }, // Utilize Sequelize's IN query capability
+            order: [[date, 'DESC']], // Change 'DESC' to 'ASC' if needed
         });
 
+        paginatedResult = notifications.slice(start, end);
+
         // Return found notifications with success status
-        return { status: 200, message: 'Notifications found', data: notifications };
+        return {
+            status: 200,
+            message: "Notifications found",
+            data: paginatedResult,
+            total: notifications.length,
+            page,
+            limit,
+            totalPages: Math.ceil(notifications.length / limit)
+        };
     } catch (err) {
         // Return error status and message in case of failure
         return { status: 500, message: err.message };

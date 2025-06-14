@@ -24,7 +24,7 @@ exports.historyCreatePersistence = async (token, history) => {
         }
 
         // Create a new history entry in the database
-        const newHistory = await History.create({
+        const result = await History.create({
             deviceid: history.deviceid,
             devicevalue: history.devicevalue,
             date: history.date,
@@ -32,7 +32,7 @@ exports.historyCreatePersistence = async (token, history) => {
         });
 
         // Return success status and the created history
-        return { status: 200, message: 'History created', data: newHistory };
+        return { status: 200, message: 'History created', data: result };
     } catch (err) {
         // Return error status and message in case of failure
         return { status: 500, message: err.message };

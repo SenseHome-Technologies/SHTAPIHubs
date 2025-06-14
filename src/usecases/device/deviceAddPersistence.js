@@ -31,7 +31,7 @@ exports.deviceAddPersistence = async (token, hub) => {
         }
 
         if (userRecord.role !== 'Admin') {
-            return { status: 400, message: 'You are not authorized to add devices'};
+            return { status: 400, message: 'You are not authorized to add devices' };
         }
 
         // Update the hub in the database
@@ -39,7 +39,7 @@ exports.deviceAddPersistence = async (token, hub) => {
             discoveryflag: 1
         });
 
-         // Respond with success message
+        // Respond with success message
         return { status: 200, message: "Device will be discovered" };
 
     } catch (error) {

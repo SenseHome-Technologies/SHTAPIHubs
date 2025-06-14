@@ -1,21 +1,21 @@
 'use strict';
 
-const {HubEntity} = require('../../entities/HubEntity');
-const {DeviceEntity} = require('../../entities/DeviceEntity');
+const { HubEntity } = require('../../entities/HubEntity');
+const { DeviceEntity } = require('../../entities/DeviceEntity');
 
-exports.add = async ({deviceAddPersistence}, {token, hubid}) => {
+exports.add = async ({ deviceAddPersistence }, { token, hubid }) => {
     try {
         // Create a new HubEntity with provided hubid
-        const hub = new HubEntity({id: hubid});
-        
+        const hub = new HubEntity({ id: hubid });
+
         // Validate the hub
         if (!hubid) {
-            return { status: 400, message: 'Hub ID is required'};
+            return { status: 400, message: 'Hub ID is required' };
         }
-        
+
         // Attempt to persist device add and retrieve result
         const result = await deviceAddPersistence(token, hub);
-        
+
         // Return the aff result
         return result;
     } catch (err) {
@@ -26,10 +26,10 @@ exports.add = async ({deviceAddPersistence}, {token, hubid}) => {
     }
 }
 
-exports.create = async ({deviceCreatePersistence}, {token, name, accesscode, type, state, value}) => {
+exports.create = async ({ deviceCreatePersistence }, { token, name, accesscode, type, state, value }) => {
     try {
         // Create a new deviceEntity with provided deviceid
-        const device = new DeviceEntity({name, accesscode, state, value, type});
+        const device = new DeviceEntity({ name, accesscode, state, value, type });
 
         // Validate the device
         if (!name, !accesscode) {
@@ -49,10 +49,10 @@ exports.create = async ({deviceCreatePersistence}, {token, name, accesscode, typ
     }
 }
 
-exports.get = async ({deviceGetPersistence}, {token, id}) => {
+exports.get = async ({ deviceGetPersistence }, { token, id }) => {
     try {
         // Create a new deviceEntity with provided deviceid
-        const device = new DeviceEntity({id});
+        const device = new DeviceEntity({ id });
 
         // Validate the device
         if (!id) {
@@ -72,18 +72,22 @@ exports.get = async ({deviceGetPersistence}, {token, id}) => {
     }
 }
 
-exports.getall = async ({deviceGetPersistence}, {token, hubid}) => {
+exports.gethuball = async ({ deviceGetPersistence }, { token, hubid, page, limit, favorite }) => {
     try {
         // Create a new HubEntity with provided hubid
-        const hub = new HubEntity({id: hubid});
+        const hub = new HubEntity({ id: hubid });
 
-        // Validate the device
+        // Validate the hub
         if (!hubid) {
             return { status: 400, message: 'Hub ID is required' };
         }
 
+        limit = parseInt(limit) || 10;
+        page = parseInt(page) || 1;
+        favorite = parseInt(favorite) || undefined;
+
         // Attempt to persist device get and retrieve result
-        const result = await deviceGetPersistence.getall(token, hub);
+        const result = await deviceGetPersistence.gethuball(token, hub, page, limit, favorite);
 
         // Return the get result
         return result;
@@ -95,10 +99,29 @@ exports.getall = async ({deviceGetPersistence}, {token, hubid}) => {
     }
 }
 
-exports.edit = async ({deviceEditPersistence}, {token, id, name, accesscode, type, state, value, favorite, hubid, divisionid}) => {
+exports.getall = async ({ deviceGetPersistence }, { token, page, limit, favorite }) => {
+    try {
+        limit = parseInt(limit) || 10;
+        page = parseInt(page) || 1;
+        favorite = parseInt(favorite) || undefined;
+
+        // Attempt to persist device get and retrieve result
+        const result = await deviceGetPersistence.getall(token, page, limit, favorite);
+
+        // Return the get result
+        return result;
+    } catch (err) {
+        // Log any errors that occur during the process
+        console.error(err);
+        // Rethrow the error to be handled by the caller
+        throw err;
+    }
+}
+
+exports.edit = async ({ deviceEditPersistence }, { token, id, name, accesscode, type, state, value, favorite, hubid, divisionid }) => {
     try {
         // Create a new deviceEntity with provided data
-        const device = new DeviceEntity({id, name, accesscode, type, state, value, favorite, hubid, divisionid});
+        const device = new DeviceEntity({ id, name, accesscode, type, state, value, favorite, hubid, divisionid });
 
         // Validate the device
         if (!id, !name, !accesscode, !type, !hubid) {
@@ -118,10 +141,10 @@ exports.edit = async ({deviceEditPersistence}, {token, id, name, accesscode, typ
     }
 }
 
-exports.delete = async ({deviceDeletePersistence}, {token, id}) => {
+exports.delete = async ({ deviceDeletePersistence }, { token, id }) => {
     try {
         // Create a new deviceEntity with provided deviceid
-        const device = new DeviceEntity({id});
+        const device = new DeviceEntity({ id });
 
         // Validate the device
         if (!id) {

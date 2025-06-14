@@ -35,7 +35,7 @@ exports.deviceCreatePersistence = async (token, device) => {
             discoveryflag: 0
         });
 
-         // Respond with success message
+        // Respond with success message
         return { status: 200, message: "Device created successfully" };
 
     } catch (error) {

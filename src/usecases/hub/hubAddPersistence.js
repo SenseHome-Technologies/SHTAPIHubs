@@ -33,14 +33,14 @@ exports.hubAddPersistence = async (token, user) => {
         }
 
         // Create a new UserHub entry
-        await User.create({
+        var result = await User.create({
             email: decoded.email,
             hubid: hubRecord.id,
             role: 'Admin'
         })
 
-         // Respond with success message
-        return { status: 200, message: "Hub added successfully" };
+        // Respond with success message
+        return { status: 200, message: "Hub added successfully", data: result };
 
     } catch (error) {
         // Handle any errors during login process

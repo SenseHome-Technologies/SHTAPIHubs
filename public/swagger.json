@@ -1,1 +1,1379 @@
-{"swagger":"2.0","info":{"title":"SenseHome-Technologies API Hubs","version":"1.0.0","description":"The purpose of the API developed is to manage the hubs of a system, including devices, events, divisions and information management functions."},"paths":{"/api/device/add":{"post":{"tags":["Device"],"summary":"Add a device to a hub","consumes":["application/json"],"produces":["application/json"],"parameters":[{"in":"body","name":"body","description":"Add a device to a hub","required":true,"schema":{"$ref":"#/definitions/AddDevice"}}],"responses":{"200":{"description":"successful operation","schema":{"type":"Object","items":{"$ref":"#/definitions/device"}}}}}},"/api/device/create":{"post":{"tags":["Device"],"summary":"Create a device","consumes":["application/json"],"produces":["application/json"],"parameters":[{"in":"body","name":"body","description":"Create a device","required":true,"schema":{"$ref":"#/definitions/CreateDevice"}}],"responses":{"200":{"description":"successful operation","schema":{"type":"Object","items":{"$ref":"#/definitions/device"}}}}}},"/api/device/delete":{"delete":{"tags":["Device"],"summary":"Delete a device by its ID","consumes":["application/json"],"produces":["application/json"],"parameters":[{"name":"id","in":"path","required":true,"type":"string","description":"The ID of the device to delete"}],"responses":{"200":{"description":"successful operation","schema":{"type":"Object","items":{"$ref":"#/definitions/device"}}}}}},"/api/device/edit":{"put":{"tags":["Device"],"summary":"Edit a device by its ID","consumes":["application/json"],"produces":["application/json"],"parameters":[{"in":"body","name":"body","description":"Edit a device by its ID","required":true,"schema":{"$ref":"#/definitions/EditDevice"}}],"responses":{"200":{"description":"successful operation","schema":{"type":"Object","items":{"$ref":"#/definitions/device"}}}}}},"/api/device/getall":{"get":{"tags":["Device"],"summary":"Retrieve all devices of a hub by its ID","consumes":["application/json"],"produces":["application/json"],"parameters":[{"name":"hubid","in":"path","required":true,"type":"string","description":"The ID of the hub to retrieve devices from"}],"responses":{"200":{"description":"successful operation","schema":{"type":"Object","items":{"$ref":"#/definitions/device"}}}}}},"/api/device/get":{"get":{"tags":["Device"],"summary":"Retrieve a device by its ID","consumes":["application/json"],"produces":["application/json"],"parameters":[{"name":"id","in":"path","required":true,"type":"string","description":"The ID of the device to retrieve"}],"responses":{"200":{"description":"successful operation","schema":{"type":"Object","items":{"$ref":"#/definitions/device"}}}}}},"/api/division/create":{"post":{"tags":["Division"],"summary":"Create a division with the provided data","consumes":["application/json"],"produces":["application/json"],"parameters":[{"in":"body","name":"body","description":"Create a division with the provided data","required":true,"schema":{"$ref":"#/definitions/CreateDivision"}}],"responses":{"200":{"description":"successful operation","schema":{"type":"Object","items":{"$ref":"#/definitions/division"}}}}}},"/api/division/delete":{"delete":{"tags":["Division"],"summary":"Delete a division by its ID","consumes":["application/json"],"produces":["application/json"],"parameters":[{"name":"id","in":"path","required":true,"type":"string","description":"The ID of the division to delete"},{"name":"hubid","in":"path","required":true,"type":"string","description":"The ID of the hub the division belongs to"}],"responses":{"200":{"description":"successful operation","schema":{"type":"Object","items":{"$ref":"#/definitions/division"}}}}}},"/api/division/edit":{"put":{"tags":["Division"],"summary":"Edit a division by its ID","consumes":["application/json"],"produces":["application/json"],"parameters":[{"in":"body","name":"body","description":"Edit a division by its ID","required":true,"schema":{"$ref":"#/definitions/EditDivision"}}],"responses":{"200":{"description":"successful operation","schema":{"type":"Object","items":{"$ref":"#/definitions/division"}}}}}},"/api/division/get":{"get":{"tags":["Division"],"summary":"Retrieve a division by its ID","consumes":["application/json"],"produces":["application/json"],"parameters":[{"name":"hubid","in":"path","required":true,"type":"string","description":"The ID of the division to retrieve"}],"responses":{"200":{"description":"successful operation","schema":{"type":"Object","items":{"$ref":"#/definitions/division"}}}}}},"/api/event/create":{"post":{"tags":["Event"],"summary":"Create an event","consumes":["application/json"],"produces":["application/json"],"parameters":[{"in":"body","name":"body","description":"Create an event","required":true,"schema":{"$ref":"#/definitions/CreateEvent"}}],"responses":{"200":{"description":"successful operation","schema":{"type":"Object","items":{"$ref":"#/definitions/event"}}}}}},"/api/event/delete":{"delete":{"tags":["Event"],"summary":"Delete an event by its ID","consumes":["application/json"],"produces":["application/json"],"parameters":[{"name":"id","in":"path","required":true,"type":"string","description":"The ID of the event to delete"}],"responses":{"200":{"description":"successful operation","schema":{"type":"Object","items":{"$ref":"#/definitions/event"}}}}}},"/api/event/edit":{"put":{"tags":["Event"],"summary":"Update an event with the provided data","consumes":["application/json"],"produces":["application/json"],"parameters":[{"in":"body","name":"body","description":"Update an event with the provided data","required":true,"schema":{"$ref":"#/definitions/EditEvent"}}],"responses":{"200":{"description":"successful operation","schema":{"type":"Object","items":{"$ref":"#/definitions/event"}}}}}},"/api/event/getall":{"get":{"tags":["Event"],"summary":"Retrieve all events of a hub by its ID","consumes":["application/json"],"produces":["application/json"],"parameters":[{"name":"hubid","in":"path","required":true,"type":"string","description":"The ID of the hub to retrieve events from"}],"responses":{"200":{"description":"successful operation","schema":{"type":"Object","items":{"$ref":"#/definitions/event"}}}}}},"/api/event/get":{"get":{"tags":["Event"],"summary":"Retrieve an event by its ID","consumes":["application/json"],"produces":["application/json"],"parameters":[{"name":"id","in":"path","required":true,"type":"string","description":"The ID of the event to retrieve"}],"responses":{"200":{"description":"successful operation","schema":{"type":"Object","items":{"$ref":"#/definitions/event"}}}}}},"/api/history/create":{"post":{"tags":["History"],"summary":"Create a history entry","consumes":["application/json"],"produces":["application/json"],"parameters":[{"in":"body","name":"body","description":"Create a history entry","required":true,"schema":{"$ref":"#/definitions/CreateHistoryEntry"}}],"responses":{"200":{"description":"successful operation","schema":{"type":"Object","items":{"$ref":"#/definitions/history"}}}}}},"/api/history/get":{"get":{"tags":["History"],"summary":"Retrieve all history entries associated with a device","consumes":["application/json"],"produces":["application/json"],"parameters":[{"name":"hubid","in":"path","required":true,"type":"string","description":"The ID of the hub to retrieve history entries for"}],"responses":{"200":{"description":"successful operation","schema":{"type":"Object","items":{"$ref":"#/definitions/history"}}}}}},"/api/hub/add":{"post":{"tags":["Hub"],"summary":"Add a hub by its ID","consumes":["application/json"],"produces":["application/json"],"parameters":[{"in":"body","name":"body","description":"Add a hub by its ID","required":true,"schema":{"$ref":"#/definitions/AddHub"}}],"responses":{"200":{"description":"successful operation","schema":{"type":"Object","items":{"$ref":"#/definitions/hub"}}}}}},"/api/hub/delete":{"delete":{"tags":["Hub"],"summary":"Delete a hub by its ID and type","consumes":["application/json"],"produces":["application/json"],"parameters":[{"name":"id","in":"path","required":true,"type":"string","description":"The ID of the hub to delete"},{"name":"type","in":"path","required":true,"type":"string","description":"The type of the hub to delete"}],"responses":{"200":{"description":"successful operation","schema":{"type":"Object","items":{"$ref":"#/definitions/hub"}}}}}},"/api/hub/edit":{"put":{"tags":["Hub"],"summary":"Edit a hub by its ID","consumes":["application/json"],"produces":["application/json"],"parameters":[{"in":"body","name":"body","description":"Edit a hub by its ID","required":true,"schema":{"$ref":"#/definitions/EditHub"}}],"responses":{"200":{"description":"successful operation","schema":{"type":"Object","items":{"$ref":"#/definitions/hub"}}}}}},"/api/hub/getall":{"get":{"tags":["Hub"],"summary":"Retrieve all hubs associated with the user's email","consumes":["application/json"],"produces":["application/json"],"parameters":[{"name":"email","in":"path","required":true,"type":"string","description":"The email of the user to retrieve hubs for"}],"responses":{"200":{"description":"successful operation","schema":{"type":"Object","items":{"$ref":"#/definitions/hub"}}}}}},"/api/hub/get":{"get":{"tags":["Hub"],"summary":"Retrieve a hub by its ID","consumes":["application/json"],"produces":["application/json"],"parameters":[{"name":"id","in":"path","required":true,"type":"string","description":"The ID of the hub to retrieve"}],"responses":{"200":{"description":"successful operation","schema":{"type":"Object","items":{"$ref":"#/definitions/hub"}}}}}},"/api/hub/login":{"post":{"tags":["Hub"],"summary":"Login a hub by its ID","consumes":["application/json"],"produces":["application/json"],"parameters":[{"in":"body","name":"body","description":"Login a hub by its ID","required":true,"schema":{"$ref":"#/definitions/LoginHub"}}],"responses":{"200":{"description":"successful operation","schema":{"type":"Object","items":{"$ref":"#/definitions/hub"}}}}}},"/api/notification/create":{"post":{"tags":["Notification"],"summary":"Create a new notification","consumes":["application/json"],"produces":["application/json"],"parameters":[{"in":"body","name":"body","description":"Create a new notification","required":true,"schema":{"$ref":"#/definitions/CreateNotification"}}],"responses":{"200":{"description":"successful operation","schema":{"type":"Object","items":{"$ref":"#/definitions/notification"}}}}}},"/api/notification/delete":{"delete":{"tags":["Notification"],"summary":"Delete a notification by its ID","consumes":["application/json"],"produces":["application/json"],"parameters":[{"name":"id","in":"path","required":true,"type":"string","description":"The ID of the notification to delete"},{"name":"hubid","in":"path","required":true,"type":"string","description":"The ID of the hub the notification belongs to"}],"responses":{"200":{"description":"successful operation","schema":{"type":"Object","items":{"$ref":"#/definitions/notification"}}}}}},"/api/notification/get":{"get":{"tags":["Notification"],"summary":"Retrieve all notifications for a hub by its ID","consumes":["application/json"],"produces":["application/json"],"parameters":[],"responses":{"200":{"description":"successful operation","schema":{"type":"Object","items":{"$ref":"#/definitions/notifications"}}}}}},"/api/devicetypes/get":{"get":{"tags":["Types"],"summary":"Retrieve all available device types","consumes":["application/json"],"produces":["application/json"],"parameters":[],"responses":{"200":{"description":"successful operation","schema":{"type":"Object","items":{"$ref":"#/definitions/response"}}}}}},"/api/eventtypes/get":{"get":{"tags":["Types"],"summary":"Retrieve all available event types","consumes":["application/json"],"produces":["application/json"],"parameters":[],"responses":{"200":{"description":"successful operation","schema":{"type":"Object","items":{"$ref":"#/definitions/response"}}}}}},"/api/operators/get":{"get":{"tags":["Types"],"summary":"Retrieve all available operators","consumes":["application/json"],"produces":["application/json"],"parameters":[],"responses":{"200":{"description":"successful operation","schema":{"type":"Object","items":{"$ref":"#/definitions/response"}}}}}},"/api/statments/get":{"get":{"tags":["Types"],"summary":"Retrieve all available statements","consumes":["application/json"],"produces":["application/json"],"parameters":[],"responses":{"200":{"description":"successful operation","schema":{"type":"Object","items":{"$ref":"#/definitions/response"}}}}}}},"definitions":{"AddDevice":{"properties":{"hubid":{"type":"string","description":"The hubid to add the device to"}},"required":["hubid"]},"device":{"properties":{"status":{"type":"number","description":"The status of the device"},"message":{"type":"string","description":"The message of the device"}},"required":["status","message"]},"CreateDevice":{"properties":{"name":{"type":"string","description":"The name of the device"},"accesscode":{"type":"string","description":"The access code of the device"},"type":{"type":"number","description":"The type of the device"},"state":{"type":"number","description":"The state of the device"},"value":{"type":"number","description":"The value of the device"}},"required":["name","accesscode","type","state","value"]},"DeleteDevice":{"properties":{"id":{"type":"string","description":"The ID of the device to delete"}},"required":["id"]},"EditDevice":{"properties":{"id":{"type":"string","description":"The ID of the device to edit"},"name":{"type":"string","description":"The name of the device"},"accesscode":{"type":"string","description":"The access code of the device"},"type":{"type":"string","description":"The type of the device"},"state":{"type":"string","description":"The state of the device"},"value":{"type":"string","description":"The value of the device"},"favorite":{"type":"boolean","description":"The favorite status of the device"},"hubid":{"type":"string","description":"The ID of the hub of the device"},"divisionid":{"type":"string","description":"The ID of the division of the device"}},"required":["id","name","accesscode","type","state","value","favorite","hubid","divisionid"]},"GetAllDevices":{"properties":{"hubid":{"type":"string","description":"The ID of the hub to retrieve devices from"}},"required":["hubid"]},"GetDevice":{"properties":{"id":{"type":"string","description":"The ID of the device to retrieve"}},"required":["id"]},"CreateDivision":{"properties":{"name":{"type":"string","description":"The name of the division"},"icon":{"type":"string","description":"The icon of the division"},"hubid":{"type":"string","description":"The ID of the hub the division belongs to"}},"required":["name","icon","hubid"]},"division":{"properties":{"status":{"type":"number","description":"The status of the division"},"message":{"type":"string","description":"The message of the division"}},"required":["status","message"]},"DeleteDivision":{"properties":{"id":{"type":"string","description":"The ID of the division to delete"},"hubid":{"type":"string","description":"The ID of the hub the division belongs to"}},"required":["id","hubid"]},"EditDivision":{"properties":{"id":{"type":"string","description":"The ID of the division to edit"},"name":{"type":"string","description":"The name of the division"},"icon":{"type":"string","description":"The icon of the division"},"hubid":{"type":"string","description":"The ID of the hub the division belongs to"}},"required":["id","name","icon","hubid"]},"GetDivision":{"properties":{"hubid":{"type":"string","description":"The ID of the division to retrieve"}},"required":["hubid"]},"CreateEvent":{"properties":{"name":{"type":"string","description":"The name of the event"},"type":{"type":"string","description":"The type of the event"},"state":{"type":"string","description":"The state of the event"},"hubid":{"type":"string","description":"The id of the hub to which the event belongs"},"eventtargets":{"type":"array","description":"The list of event targets","items":{"type":"Object"}},"schedules":{"type":"array","description":"The list of schedules","items":{"type":"Object"}}},"required":["name","type","state","hubid","eventtargets","schedules"]},"event":{"properties":{"status":{"type":"number","description":"The status of the event"},"message":{"type":"string","description":"The message of the event"}},"required":["status","message"]},"DeleteEvent":{"properties":{"id":{"type":"string","description":"The ID of the event to delete"}},"required":["id"]},"EditEvent":{"properties":{"id":{"type":"string","description":"The ID of the event to update"},"name":{"type":"string","description":"The new name of the event"},"type":{"type":"string","description":"The new type of the event"},"state":{"type":"string","description":"The new state of the event"},"hubid":{"type":"string","description":"The ID of the hub the event belongs to"},"eventtargets":{"type":"array","description":"The updated list of event targets","items":{"type":"Object"}},"schedules":{"type":"array","description":"The updated list of schedules","items":{"type":"Object"}}},"required":["id","name","type","state","hubid","eventtargets","schedules"]},"GetAllEvents":{"properties":{"hubid":{"type":"string","description":"The ID of the hub to retrieve events from"}},"required":["hubid"]},"GetEvent":{"properties":{"id":{"type":"string","description":"The ID of the event to retrieve"}},"required":["id"]},"CreateHistoryEntry":{"properties":{"deviceid":{"type":"string","description":"The ID of the device to create the history entry for"},"devicevalue":{"type":"string","description":"The value of the device to create the history entry for"},"date":{"type":"date","description":"The date of the history entry"},"hubid":{"type":"string","description":"The ID of the hub to create the history entry for"}},"required":["deviceid","devicevalue","date","hubid"]},"history":{"properties":{"status":{"type":"number","description":"The status of the history entries"},"message":{"type":"string","description":"The message of the history entries"}},"required":["status","message"]},"GetHistoryEntries":{"properties":{"hubid":{"type":"string","description":"The ID of the hub to retrieve history entries for"}},"required":["hubid"]},"AddHub":{"properties":{"id":{"type":"string","description":"The ID of the hub to add"},"email":{"type":"string","description":"The email to register the hub with"}},"required":["id","email"]},"hub":{"properties":{"status":{"type":"number","description":"The status of the hub"},"message":{"type":"string","description":"The message of the hub"},"token":{"type":"string","description":"The JWT token of the hub"}},"required":["status","message","token"]},"DeleteHub":{"properties":{"id":{"type":"string","description":"The ID of the hub to delete"},"type":{"type":"string","description":"The type of the hub to delete"}},"required":["id","type"]},"EditHub":{"properties":{"id":{"type":"string","description":"The ID of the hub to edit"},"name":{"type":"string","description":"The name of the hub to update"},"users":{"type":"array","description":"The users to update in the hub"}},"required":["id","name","users"]},"GetAllHubs":{"properties":{"email":{"type":"string","description":"The email of the user to retrieve hubs for"}},"required":["email"]},"GetHub":{"properties":{"id":{"type":"string","description":"The ID of the hub to retrieve"}},"required":["id"]},"LoginHub":{"properties":{"id":{"type":"string","description":"The ID of the hub to login"}},"required":["id"]},"CreateNotification":{"properties":{"description":{"type":"string","description":"The description of the notification"},"date":{"type":"date","description":"The date of the notification"},"hubid":{"type":"uuid","description":"The ID of the hub associated with the notification"}},"required":["description","date","hubid"]},"notification":{"properties":{"status":{"type":"number","description":"The status of the delete operation"},"message":{"type":"string","description":"The message of the delete operation"}},"required":["status","message"]},"DeleteNotification":{"properties":{"id":{"type":"string","description":"The ID of the notification to delete"},"hubid":{"type":"string","description":"The ID of the hub the notification belongs to"}},"required":["id","hubid"]},"GetAllNotifications":{"properties":{"hubid":{"type":"string","description":"The ID of the hub to retrieve notifications for"}},"required":["hubid"]},"notifications":{"properties":{"status":{"type":"number","description":"The status of the notifications"},"message":{"type":"string","description":"The message of the notifications"}},"required":["status","message"]},"response":{"properties":{"status":{"type":"number","description":"The status code of the response"},"message":{"type":"string","description":"The message of the response"},"data":{"type":"array","description":"The list of statements"}},"required":["status","message","data"]}}}
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "SenseHome Technologies API",
+        "version": "2.0.0",
+        "description": "Complete API for managing smart home hubs, devices, notifications, and Firebase Cloud Messaging. Includes device management, user authentication, real-time notifications, and comprehensive data seeding capabilities.",
+        "contact": {
+            "name": "SenseHome Technologies",
+            "email": "support@sensehome.tech"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3002",
+            "description": "Development server"
+        },
+        {
+            "url": "https://api.sensehome.tech",
+            "description": "Production server"
+        }
+    ],
+    "security": [
+        {
+            "BearerAuth": []
+        }
+    ],
+    "tags": [
+        {
+            "name": "Authentication",
+            "description": "Hub authentication and login operations"
+        },
+        {
+            "name": "Hub",
+            "description": "Hub management operations"
+        },
+        {
+            "name": "Device",
+            "description": "Device management and control operations"
+        },
+        {
+            "name": "Division",
+            "description": "Room/division management operations"
+        },
+        {
+            "name": "Notification",
+            "description": "Notification management and Firebase messaging"
+        },
+        {
+            "name": "History",
+            "description": "Device history and analytics operations"
+        },
+        {
+            "name": "Types",
+            "description": "System types and metadata operations"
+        },
+        {
+            "name": "Firebase",
+            "description": "Firebase Cloud Messaging operations"
+        }
+    ],
+    "paths": {
+        "/api/hub/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Login to a hub",
+                "description": "Authenticate and login to a specific hub using hub ID",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LoginHub"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login successful",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LoginResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid hub ID or login failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/hub/add": {
+            "post": {
+                "tags": [
+                    "Hub"
+                ],
+                "summary": "Add a new hub",
+                "description": "Register a new hub with user email",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AddHub"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Hub added successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HubResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/hub/getall/{email}": {
+            "get": {
+                "tags": [
+                    "Hub"
+                ],
+                "summary": "Get all hubs for a user",
+                "description": "Retrieve all hubs associated with a user's email",
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "email"
+                        },
+                        "description": "User's email address"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Hubs retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Hubs retrieved successfully"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Hub"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No hubs found for this email",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/hub/get/{id}": {
+            "get": {
+                "tags": [
+                    "Hub"
+                ],
+                "summary": "Get hub by ID",
+                "description": "Retrieve a specific hub by its ID",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        },
+                        "description": "Hub ID"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Hub retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HubResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Hub not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/device/getall/{hubid}": {
+            "get": {
+                "tags": [
+                    "Device"
+                ],
+                "summary": "Get all devices for a hub",
+                "description": "Retrieve all devices associated with a specific hub",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "hubid",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        },
+                        "description": "Hub ID"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Devices retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Devices retrieved successfully"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Device"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/device/get/{id}": {
+            "get": {
+                "tags": [
+                    "Device"
+                ],
+                "summary": "Get device by ID",
+                "description": "Retrieve a specific device by its ID",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Device ID"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Device retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DeviceResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Device not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/device/create": {
+            "post": {
+                "tags": [
+                    "Device"
+                ],
+                "summary": "Create a new device",
+                "description": "Create a new device in the system",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateDevice"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Device created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DeviceResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/device/edit/{id}": {
+            "put": {
+                "tags": [
+                    "Device"
+                ],
+                "summary": "Edit a device",
+                "description": "Update device properties. Automatically sends Firebase notifications to all hub users when device is updated.",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Device ID"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EditDevice"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Device updated successfully. Firebase notifications sent to all hub users.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/DeviceResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Device not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/firebase/register-token": {
+            "post": {
+                "tags": [
+                    "Firebase"
+                ],
+                "summary": "Register FCM token",
+                "description": "Register a Firebase Cloud Messaging token for a user to receive push notifications",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RegisterFCMToken"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "FCM token registered successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "FCM token registered successfully"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid token or user data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/firebase/send-notification": {
+            "post": {
+                "tags": [
+                    "Firebase"
+                ],
+                "summary": "Send Firebase notification",
+                "description": "Send a Firebase Cloud Messaging notification to specific users or all users of a hub",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/SendFirebaseNotification"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Notification sent successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Notification sent successfully"
+                                        },
+                                        "sentCount": {
+                                            "type": "integer",
+                                            "example": 5,
+                                            "description": "Number of notifications sent"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid notification data",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/notification/get/{hubid}": {
+            "get": {
+                "tags": [
+                    "Notification"
+                ],
+                "summary": "Get all notifications for a hub",
+                "description": "Retrieve all notifications for a specific hub with pagination support",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "hubid",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        },
+                        "description": "Hub ID"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "default": 1
+                        },
+                        "description": "Page number for pagination"
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 100,
+                            "default": 15
+                        },
+                        "description": "Number of notifications per page"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Notifications retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Notifications retrieved successfully"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Notification"
+                                            }
+                                        },
+                                        "pagination": {
+                                            "$ref": "#/components/schemas/PaginationInfo"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/devicetypes/get": {
+            "get": {
+                "tags": [
+                    "Types"
+                ],
+                "summary": "Get all device types",
+                "description": "Retrieve all available device types in the system",
+                "responses": {
+                    "200": {
+                        "description": "Device types retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Device types retrieved successfully"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/DeviceType"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/history/get/{hubid}": {
+            "get": {
+                "tags": [
+                    "History"
+                ],
+                "summary": "Get device history for a hub",
+                "description": "Retrieve device history entries for a specific hub with pagination support",
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "hubid",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        },
+                        "description": "Hub ID"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "default": 1
+                        },
+                        "description": "Page number for pagination"
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 100,
+                            "default": 50
+                        },
+                        "description": "Number of history entries per page"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "History retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 200
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "History retrieved successfully"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/History"
+                                            }
+                                        },
+                                        "pagination": {
+                                            "$ref": "#/components/schemas/PaginationInfo"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "BearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT",
+                "description": "JWT token obtained from hub login"
+            }
+        },
+        "schemas": {
+            "ErrorResponse": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "integer",
+                        "example": 400
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Error message"
+                    }
+                },
+                "required": [
+                    "status",
+                    "message"
+                ]
+            },
+            "PaginationInfo": {
+                "type": "object",
+                "properties": {
+                    "currentPage": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "totalPages": {
+                        "type": "integer",
+                        "example": 10
+                    },
+                    "totalItems": {
+                        "type": "integer",
+                        "example": 150
+                    },
+                    "itemsPerPage": {
+                        "type": "integer",
+                        "example": 15
+                    }
+                }
+            },
+            "LoginHub": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "description": "Hub ID",
+                        "example": "123e4567-e89b-12d3-a456-426614174000"
+                    }
+                },
+                "required": [
+                    "id"
+                ]
+            },
+            "LoginResponse": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "integer",
+                        "example": 200
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Login successful"
+                    },
+                    "token": {
+                        "type": "string",
+                        "description": "JWT authentication token",
+                        "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                    }
+                },
+                "required": [
+                    "status",
+                    "message",
+                    "token"
+                ]
+            },
+            "AddHub": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "description": "Hub ID",
+                        "example": "123e4567-e89b-12d3-a456-426614174000"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "description": "User email to associate with the hub",
+                        "example": "user@example.com"
+                    }
+                },
+                "required": [
+                    "id",
+                    "email"
+                ]
+            },
+            "Hub": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "example": "123e4567-e89b-12d3-a456-426614174000"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Hub Lisboa 1"
+                    },
+                    "discoveryflag": {
+                        "type": "integer",
+                        "description": "Discovery flag (0 or 1)",
+                        "example": 1
+                    },
+                    "role": {
+                        "type": "string",
+                        "example": "Hub"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-01-15T10:30:00Z"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-01-15T10:30:00Z"
+                    }
+                }
+            },
+            "HubResponse": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "integer",
+                        "example": 200
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Hub operation successful"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/Hub"
+                    }
+                },
+                "required": [
+                    "status",
+                    "message"
+                ]
+            },
+            "Device": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Luz LED Sala 1"
+                    },
+                    "accesscode": {
+                        "type": "string",
+                        "example": "ABC12345"
+                    },
+                    "state": {
+                        "type": "integer",
+                        "description": "Device state (0 or 1)",
+                        "example": 1
+                    },
+                    "favorite": {
+                        "type": "integer",
+                        "description": "Favorite status (0 or 1)",
+                        "example": 0
+                    },
+                    "value": {
+                        "type": "number",
+                        "format": "float",
+                        "description": "Device value",
+                        "example": 75.5
+                    },
+                    "type": {
+                        "type": "integer",
+                        "description": "Device type ID",
+                        "example": 1
+                    },
+                    "hubid": {
+                        "type": "string",
+                        "format": "uuid",
+                        "example": "123e4567-e89b-12d3-a456-426614174000"
+                    },
+                    "divisionid": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-01-15T10:30:00Z"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-01-15T10:30:00Z"
+                    }
+                }
+            },
+            "CreateDevice": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "Device name",
+                        "example": "Luz LED Sala 1"
+                    },
+                    "accesscode": {
+                        "type": "string",
+                        "description": "Device access code",
+                        "example": "ABC12345"
+                    },
+                    "type": {
+                        "type": "integer",
+                        "description": "Device type ID",
+                        "example": 1
+                    },
+                    "state": {
+                        "type": "integer",
+                        "description": "Initial device state (0 or 1)",
+                        "example": 0
+                    },
+                    "value": {
+                        "type": "number",
+                        "format": "float",
+                        "description": "Initial device value",
+                        "example": 0
+                    },
+                    "hubid": {
+                        "type": "string",
+                        "format": "uuid",
+                        "description": "Hub ID",
+                        "example": "123e4567-e89b-12d3-a456-426614174000"
+                    },
+                    "divisionid": {
+                        "type": "integer",
+                        "description": "Division ID",
+                        "example": 1
+                    }
+                },
+                "required": [
+                    "name",
+                    "accesscode",
+                    "type",
+                    "state",
+                    "value",
+                    "hubid",
+                    "divisionid"
+                ]
+            },
+            "EditDevice": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "Device name",
+                        "example": "Luz LED Sala 1"
+                    },
+                    "accesscode": {
+                        "type": "string",
+                        "description": "Device access code",
+                        "example": "ABC12345"
+                    },
+                    "type": {
+                        "type": "integer",
+                        "description": "Device type ID",
+                        "example": 1
+                    },
+                    "state": {
+                        "type": "integer",
+                        "description": "Device state (0 or 1)",
+                        "example": 1
+                    },
+                    "favorite": {
+                        "type": "integer",
+                        "description": "Favorite status (0 or 1)",
+                        "example": 1
+                    },
+                    "value": {
+                        "type": "number",
+                        "format": "float",
+                        "description": "Device value",
+                        "example": 75.5
+                    },
+                    "hubid": {
+                        "type": "string",
+                        "format": "uuid",
+                        "description": "Hub ID",
+                        "example": "123e4567-e89b-12d3-a456-426614174000"
+                    },
+                    "divisionid": {
+                        "type": "integer",
+                        "description": "Division ID",
+                        "example": 1
+                    }
+                }
+            },
+            "DeviceResponse": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "integer",
+                        "example": 200
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Device operation successful"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/Device"
+                    }
+                },
+                "required": [
+                    "status",
+                    "message"
+                ]
+            },
+            "RegisterFCMToken": {
+                "type": "object",
+                "properties": {
+                    "token": {
+                        "type": "string",
+                        "description": "Firebase Cloud Messaging token",
+                        "example": "dGhpcyBpcyBhIGZha2UgRkNNIHRva2Vu..."
+                    },
+                    "userId": {
+                        "type": "string",
+                        "description": "User identifier (email or ID)",
+                        "example": "user@example.com"
+                    },
+                    "hubId": {
+                        "type": "string",
+                        "format": "uuid",
+                        "description": "Hub ID",
+                        "example": "123e4567-e89b-12d3-a456-426614174000"
+                    }
+                },
+                "required": [
+                    "token",
+                    "userId",
+                    "hubId"
+                ]
+            },
+            "SendFirebaseNotification": {
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "description": "Notification title",
+                        "example": "Device Updated"
+                    },
+                    "body": {
+                        "type": "string",
+                        "description": "Notification body",
+                        "example": "Luz LED Sala 1 was turned on"
+                    },
+                    "hubId": {
+                        "type": "string",
+                        "format": "uuid",
+                        "description": "Hub ID to send notification to all users",
+                        "example": "123e4567-e89b-12d3-a456-426614174000"
+                    },
+                    "userIds": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "description": "Specific user IDs to send notification to (optional)",
+                        "example": [
+                            "user1@example.com",
+                            "user2@example.com"
+                        ]
+                    },
+                    "data": {
+                        "type": "object",
+                        "description": "Additional data to send with notification",
+                        "example": {
+                            "deviceId": "1",
+                            "action": "state_change"
+                        }
+                    }
+                },
+                "required": [
+                    "title",
+                    "body",
+                    "hubId"
+                ]
+            },
+            "Notification": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Device Luz LED Sala 1 was updated"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-01-15T10:30:00Z"
+                    },
+                    "hubid": {
+                        "type": "string",
+                        "format": "uuid",
+                        "example": "123e4567-e89b-12d3-a456-426614174000"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-01-15T10:30:00Z"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-01-15T10:30:00Z"
+                    }
+                }
+            },
+            "History": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "deviceid": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "devicevalue": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 75.5
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-01-15T10:30:00Z"
+                    },
+                    "hubid": {
+                        "type": "string",
+                        "format": "uuid",
+                        "example": "123e4567-e89b-12d3-a456-426614174000"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-01-15T10:30:00Z"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-01-15T10:30:00Z"
+                    }
+                }
+            },
+            "DeviceType": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Luz LED"
+                    },
+                    "icon": {
+                        "type": "string",
+                        "example": "💡"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-01-15T10:30:00Z"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-01-15T10:30:00Z"
+                    }
+                }
+            }
+        }
+    }
+}

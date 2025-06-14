@@ -14,6 +14,15 @@ const swaggerDocument = require('../public/swagger.json');
 // Load environment variables
 require('dotenv').config();
 
+// Initialize Firebase service
+const firebaseService = require('./services/firebaseService');
+try {
+    firebaseService.initialize();
+} catch (error) {
+    console.warn('Firebase initialization failed:', error.message);
+    console.warn('Push notifications will not be available');
+}
+
 // Connect to the database
 sequelize.sync()
     .then(() => console.log('Database connected'))
@@ -30,7 +39,7 @@ app.use(bodyParser.json());
 // Routes
 app.use('/api', require('./controllers/routes/hubRoute'));
 app.use('/api', require('./controllers/routes/deviceRoute'));
-app.use('/api', require('./controllers/routes/divisionRoute')); 
+app.use('/api', require('./controllers/routes/divisionRoute'));
 app.use('/api', require('./controllers/routes/notificationRoute'));
 app.use('/api', require('./controllers/routes/historyRoute'));
 app.use('/api', require('./controllers/routes/typesRoute'));

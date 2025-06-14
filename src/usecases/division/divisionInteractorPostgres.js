@@ -79,13 +79,26 @@ exports.get = async ({ divisionGetPersistence }, { token, hubid }) => {
 
         // Validate the hub ID
         const validationResult = hubid ? { status: 200 } : { status: 400, message: 'Hub ID is required' };
-        
+
         if (validationResult.status !== 200) {
             return validationResult;
         }
 
         // Attempt to persist division get and retrieve result
-        const result = await divisionGetPersistence(token, hub);
+        const result = await divisionGetPersistence.get(token, hub);
+
+        return result;
+    } catch (error) {
+        console.error(error);
+        // Return the error to be handled by the caller
+        return { status: 500, message: error.message };
+    }
+};
+
+exports.getall = async ({ divisionGetPersistence }, { token }) => {
+    try {
+        // Attempt to persist division get and retrieve result
+        const result = await divisionGetPersistence.getall(token);
 
         return result;
     } catch (error) {

@@ -9,7 +9,7 @@ const router = require('express').Router();
 
 
 /**
- * @api {post} /api/device/add Add a device to a hub
+ * @api {post} /api/devices/add Add a device to a hub
  * @apiName AddDevice
  * @apiGroup Device
  * @apiDescription Add a device to a hub
@@ -21,17 +21,17 @@ const router = require('express').Router();
  * @apiSuccess {Number} device.status The status of the device
  * @apiSuccess {String} device.message The message of the device
  */
-router.route('/device/add').post(
+router.route('/devices/add').post(
     // Define an asynchronous function to handle the add route
     async (req, res) => {
         // Extract token from request headers
         const token = req.headers['token'];
         // Extract deviceid from the request body
-        const {hubid} = req.body;
+        const { hubid } = req.body;
 
         try {
             // Use deviceInteractorPostgres to attempt add with the provided deviceid
-            const device = await deviceInteractorPostgres.add({deviceAddPersistence}, {token, hubid});
+            const device = await deviceInteractorPostgres.add({ deviceAddPersistence }, { token, hubid });
             // Send the response with the status and device data
             res.status(device.status).send(device);
         } catch (err) {
@@ -44,7 +44,7 @@ router.route('/device/add').post(
 )
 
 /**
- * @api {post} /api/device/create Create a device
+ * @api {post} /api/devices Create a device
  * @apiName CreateDevice
  * @apiGroup Device
  * @apiDescription Create a device
@@ -60,52 +60,17 @@ router.route('/device/add').post(
  * @apiSuccess {Number} device.status The status of the device
  * @apiSuccess {String} device.message The message of the device
  */
-router.route('/device/create').post(
+router.route('/devices').post(
     // Define an asynchronous function to handle the add route
     async (req, res) => {
         // Extract token from request headers
         const token = req.headers['token'];
         // Extract deviceid from the request body
-        const {name, accesscode, type, state, value} = req.body;
+        const { name, accesscode, type, state, value } = req.body;
 
         try {
             // Use deviceInteractorPostgres to attempt add with the provided deviceid
-            const device = await deviceInteractorPostgres.create({deviceCreatePersistence}, {token, name, accesscode, type, state, value});
-            // Send the response with the status and device data
-            res.status(device.status).send(device);
-        } catch (err) {
-            // Log any errors that occur during the add process
-            console.log(err);
-            // Rethrow the error to be handled by the caller
-            throw err;
-        }
-    }
-)
-
-/**
- * @api {get} /api/device/get Get a device
- * @apiName GetDevice
- * @apiGroup Device
- * @apiDescription Retrieve a device by its ID
- *
- * @apiHeader {String} token The user's token
- * @apiParam {String} id The ID of the device to retrieve
- *
- * @apiSuccess {Object} device The device
- * @apiSuccess {Number} device.status The status of the device
- * @apiSuccess {String} device.message The message of the device
- */
-router.route('/device/get').get(
-    // Define an asynchronous function to handle the get route
-    async (req, res) => {
-        // Extract token from request headers
-        const token = req.headers['token'];
-        // Extract deviceid from the request body
-        const {id} = req.body;
-
-        try {
-            // Use deviceInteractorPostgres to attempt get with the provided deviceid
-            const device = await deviceInteractorPostgres.get({deviceGetPersistence}, {token, id});
+            const device = await deviceInteractorPostgres.create({ deviceCreatePersistence }, { token, name, accesscode, type, state, value });
             // Send the response with the status and device data
             res.status(device.status).send(device);
         } catch (err) {
@@ -130,17 +95,55 @@ router.route('/device/get').get(
  * @apiSuccess {Number} device.status The status of the devices
  * @apiSuccess {String} device.message The message of the devices
  */
-router.route('/device/getall').get(
+router.route('/devices/').get(
     // Define an asynchronous function to handle the get route
     async (req, res) => {
         // Extract token from request headers
         const token = req.headers['token'];
-        // Extract deviceid from the request body
-        const {hubid} = req.body;
+        // Extract data from the request query
+        const { page, limit, favorite } = req.query;
+
+        console.log("ENTER HERE");
 
         try {
             // Use deviceInteractorPostgres to attempt get with the provided hubid
-            const device = await deviceInteractorPostgres.getall({deviceGetPersistence}, {token, hubid});
+            const device = await deviceInteractorPostgres.getall({ deviceGetPersistence }, { token, page, limit, favorite });
+            // Send the response with the status and device data
+            res.status(device.status).send(device);
+        } catch (err) {
+            // Log any errors that occur during the add process
+            console.log(err);
+            // Rethrow the error to be handled by the caller
+            throw err;
+        }
+    }
+)
+/**
+ * @api {get} /api/devices/hub/:hubid Get all devices of a hub
+ * @apiName GetAllDevicesOfHub
+ * @apiGroup Device
+ * @apiDescription Retrieve all devices of a hub by its ID
+ *
+ * @apiHeader {String} token The user's token
+ * @apiParam {String} hubid The ID of the hub to retrieve devices from
+ *
+ * @apiSuccess {Object} device The devices
+ * @apiSuccess {Number} device.status The status of the devices
+ * @apiSuccess {String} device.message The message of the devices
+ */
+router.route('/devices/hub/:hubid').get(
+    // Define an asynchronous function to handle the get route
+    async (req, res) => {
+        // Extract token from request headers
+        const token = req.headers['token'];
+        // Extract data from the request query
+        const { page, limit, favorite } = req.query;
+        // Extract hubid from the request params
+        const { hubid } = req.params;
+
+        try {
+            // Use deviceInteractorPostgres to attempt get with the provided hubid
+            const device = await deviceInteractorPostgres.gethuball({ deviceGetPersistence }, { token, hubid, page, limit, favorite });
             // Send the response with the status and device data
             res.status(device.status).send(device);
         } catch (err) {
@@ -153,7 +156,43 @@ router.route('/device/getall').get(
 )
 
 /**
- * @api {put} /api/device/edit Edit a device
+ * @api {get} /api/devices/:id Get a device by ID
+ * @apiName GetDeviceByID
+ * @apiGroup Device
+ * @apiDescription Retrieve a device by its ID
+ *
+ * @apiHeader {String} token The user's token
+ * @apiParam {String} id The ID of the device to retrieve
+ *
+ * @apiSuccess {Object} device The device
+ * @apiSuccess {Number} device.status The status of the device
+ * @apiSuccess {String} device.message The message of the device
+ */
+
+router.route('/devices/:id').get(
+    // Define an asynchronous function to handle the get route
+    async (req, res) => {
+        // Extract token from request headers
+        const token = req.headers['token'];
+        // Extract device id from the URL parameter
+        const { id } = req.params;
+
+        try {
+            // Use deviceInteractorPostgres to attempt get with the provided deviceid
+            const device = await deviceInteractorPostgres.get({ deviceGetPersistence }, { token, id });
+            // Send the response with the status and device data
+            res.status(device.status).send(device);
+        } catch (err) {
+            // Log any errors that occur during the add process
+            console.log(err);
+            // Rethrow the error to be handled by the caller
+            throw err;
+        }
+    }
+)
+
+/**
+ * @api {put} /api/devices/:id Edit a device
  * @apiName EditDevice
  * @apiGroup Device
  * @apiDescription Edit a device by its ID
@@ -173,17 +212,18 @@ router.route('/device/getall').get(
  * @apiSuccess {Number} device.status The status of the device
  * @apiSuccess {String} device.message The message of the device
  */
-router.route('/device/edit').put(
+router.route('/devices/:id').put(
     // Define an asynchronous function to handle the edit route
     async (req, res) => {
         // Extract token from request headers
         const token = req.headers['token'];
         // Extract deviceid from the request body
-        const {id, name, accesscode, type, state, value, favorite, hubid, divisionid} = req.body;
+        const { id } = req.params;
+        const { name, accesscode, type, state, value, favorite, hubid, divisionid } = req.body;
 
         try {
             // Use deviceInteractorPostgres to attempt edit with the provided data
-            const device = await deviceInteractorPostgres.edit({deviceEditPersistence}, {token, id, name, accesscode, type, state, value, favorite, hubid, divisionid});
+            const device = await deviceInteractorPostgres.edit({ deviceEditPersistence }, { token, id, name, accesscode, type, state, value, favorite, hubid, divisionid });
             // Send the response with the status and device data
             res.status(device.status).send(device);
         } catch (err) {
@@ -196,7 +236,7 @@ router.route('/device/edit').put(
 )
 
 /**
- * @api {delete} /api/device/delete Delete a device
+ * @api {delete} /api/devices/:id Delete a device
  * @apiName DeleteDevice
  * @apiGroup Device
  * @apiDescription Delete a device by its ID
@@ -208,17 +248,17 @@ router.route('/device/edit').put(
  * @apiSuccess {Number} device.status The status of the device
  * @apiSuccess {String} device.message The message of the device
  */
-router.route('/device/delete').delete(
+router.route('/devices/:id').delete(
     // Define an asynchronous function to handle the delete route
     async (req, res) => {
         // Extract token from request headers
         const token = req.headers['token'];
         // Extract deviceid from the request body
-        const {id} = req.body;
+        const { id } = req.params;
 
         try {
             // Use deviceInteractorPostgres to attempt delete with the provided deviceid
-            const device = await deviceInteractorPostgres.delete({deviceDeletePersistence}, {token, id});
+            const device = await deviceInteractorPostgres.delete({ deviceDeletePersistence }, { token, id });
             // Send the response with the status and device data
             res.status(device.status).send(device);
         } catch (err) {
@@ -232,3 +272,4 @@ router.route('/device/delete').delete(
 
 
 module.exports = router;
+

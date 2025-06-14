@@ -9,7 +9,7 @@ const router = require('express').Router();
 
 
 /**
- * @api {post} /api/hub/login Login a hub
+ * @api {post} /api/hubs/login Login a hub
  * @apiName LoginHub
  * @apiGroup Hub
  * @apiDescription Login a hub by its ID
@@ -22,15 +22,15 @@ const router = require('express').Router();
  * @apiSuccess {String} hub.message The message of the hub
  * @apiSuccess {String} hub.token The JWT token of the hub
  */
-router.route('/hub/login').post(
+router.route('/hubs/login').post(
     // Define an asynchronous function to handle the login route
     async (req, res) => {
         // Extract hubid from the request body
-        const {id} = req.body;
+        const { id } = req.body;
 
         try {
             // Use hubInteractorPostgres to attempt login with the provided hubid
-            const hub = await hubInteractorPostgres.login({hubLoginPersistence}, {id});
+            const hub = await hubInteractorPostgres.login({ hubLoginPersistence }, { id });
             // Send the response with the status and hub data
             res.status(hub.status).send(hub);
         } catch (err) {
@@ -43,7 +43,7 @@ router.route('/hub/login').post(
 )
 
 /**
- * @api {post} /api/hub/add Add a hub
+ * @api {post} /api/hubs Add a hub
  * @apiName AddHub
  * @apiGroup Hub
  * @apiDescription Add a hub by its ID
@@ -56,17 +56,17 @@ router.route('/hub/login').post(
  * @apiSuccess {Number} hub.status The status of the hub
  * @apiSuccess {String} hub.message The message of the hub
  */
-router.route('/hub/add').post(
+router.route('/hubs').post(
     // Define an asynchronous function to handle the add route
     async (req, res) => {
         // Extract token from request headers
         const token = req.headers['token'];
         // Extract hubid from the request body
-        const {id, email} = req.body;
+        const { id, email } = req.body;
 
         try {
             // Use hubInteractorPostgres to attempt add with the provided hubid
-            const hub = await hubInteractorPostgres.add({hubAddPersistence}, {token, id, email});
+            const hub = await hubInteractorPostgres.add({ hubAddPersistence }, { token, id, email });
             // Send the response with the status and hub data
             res.status(hub.status).send(hub);
         } catch (err) {
@@ -79,42 +79,7 @@ router.route('/hub/add').post(
 )
 
 /**
- * @api {get} /api/hub/get Get a hub
- * @apiName GetHub
- * @apiGroup Hub
- * @apiDescription Retrieve a hub by its ID
- *
- * @apiHeader {String} token The user's token
- * @apiParam {String} id The ID of the hub to retrieve
- *
- * @apiSuccess {Object} hub The retrieved hub
- * @apiSuccess {Number} hub.status The status of the hub
- * @apiSuccess {String} hub.message The message of the hub
- */
-router.route('/hub/get').get(
-    // Define an asynchronous function to handle the get route
-    async (req, res) => {
-        // Extract token from request headers
-        const token = req.headers['token'];
-        // Extract hubid from the request body
-        const {id} = req.body;
-
-        try {
-            // Use hubInteractorPostgres to attempt get with the provided hubid
-            const hub = await hubInteractorPostgres.get({hubGetPersistence}, {token, id});
-            // Send the response with the status and hub data
-            res.status(hub.status).send(hub);
-        } catch (err) {
-            // Log any errors that occur during the add process
-            console.log(err);
-            // Rethrow the error to be handled by the caller
-            throw err;
-        }
-    }
-)
-
-/**
- * @api {get} /api/hub/getall Get all hubs for a user
+ * @api {get} /api/hubs Get all hubs for a user
  * @apiName GetAllHubs
  * @apiGroup Hub
  * @apiDescription Retrieve all hubs associated with the user's email
@@ -126,17 +91,16 @@ router.route('/hub/get').get(
  * @apiSuccess {Number} hub.status The status of the hubs
  * @apiSuccess {String} hub.message The message of the hubs
  */
-router.route('/hub/getall').get(
+router.route('/hubs').get(
     // Define an asynchronous function to handle the get route
     async (req, res) => {
         // Extract token from request headers
         const token = req.headers['token'];
-        // Extract email from the request body
-        const {email} = req.body;
+        const { page, limit, email } = req.query;
 
         try {
             // Use hubInteractorPostgres to attempt get with the provided email
-            const hub = await hubInteractorPostgres.getall({hubGetPersistence}, {token, email});
+            const hub = await hubInteractorPostgres.getall({ hubGetPersistence }, { token, email, page, limit });
             // Send the response with the status and hub data
             res.status(hub.status).send(hub);
         } catch (err) {
@@ -148,8 +112,46 @@ router.route('/hub/getall').get(
     }
 )
 
+
 /**
- * @api {put} /api/hub/edit Edit a hub
+ * @api {get} /api/hubs/:id Get a hub
+ * @apiName GetHub
+ * @apiGroup Hub
+ * @apiDescription Retrieve a hub by its ID
+ *
+ * @apiHeader {String} token The user's token
+ * @apiParam {String} id The ID of the hub to retrieve
+ *
+ * @apiSuccess {Object} hub The retrieved hub
+ * @apiSuccess {Number} hub.status The status of the hub
+ * @apiSuccess {String} hub.message The message of the hub
+ */
+
+router.route('/hubs/:id').get(
+    // Define an asynchronous function to handle the get route
+    async (req, res) => {
+        // Extract token from request headers
+        const token = req.headers['token'];
+        // Extract hubid from the request body
+        const { id } = req.params;
+
+        try {
+            // Use hubInteractorPostgres to attempt get with the provided hubid
+            const hub = await hubInteractorPostgres.get({ hubGetPersistence }, { token, id });
+            // Send the response with the status and hub data
+            res.status(hub.status).send(hub);
+        } catch (err) {
+            // Log any errors that occur during the add process
+            console.log(err);
+            // Rethrow the error to be handled by the caller
+            throw err;
+        }
+    }
+)
+
+
+/**
+ * @api {put} /api/hubs Edit a hub
  * @apiName EditHub
  * @apiGroup Hub
  * @apiDescription Edit a hub by its ID
@@ -163,17 +165,17 @@ router.route('/hub/getall').get(
  * @apiSuccess {Number} hub.status The status of the edit operation
  * @apiSuccess {String} hub.message The message of the edit operation
  */
-router.route('/hub/edit').put(
+router.route('/hubs').put(
     // Define an asynchronous function to handle the edit route
     async (req, res) => {
         // Extract token from request headers
         const token = req.headers['token'];
         // Extract hubid from the request body
-        const {id, name, users} = req.body;
+        const { id, name, users } = req.body;
 
         try {
             // Use hubInteractorPostgres to attempt edit with the provided hubid, name and users
-            const hub = await hubInteractorPostgres.edit({hubEditPersistence}, {token, id, name, users});
+            const hub = await hubInteractorPostgres.edit({ hubEditPersistence }, { token, id, name, users });
             // Send the response with the status and hub data
             res.status(hub.status).send(hub);
         } catch (err) {
@@ -186,7 +188,7 @@ router.route('/hub/edit').put(
 )
 
 /**
- * @api {delete} /api/hub/delete Delete a hub
+ * @api {delete} /api/hubs/:id Delete a hub
  * @apiName DeleteHub
  * @apiGroup Hub
  * @apiDescription Delete a hub by its ID and type
@@ -199,17 +201,18 @@ router.route('/hub/edit').put(
  * @apiSuccess {Number} hub.status The status of the delete operation
  * @apiSuccess {String} hub.message The message of the delete operation
  */
-router.route('/hub/delete').delete(
+router.route('/hubs/:id').delete(
     // Define an asynchronous function to handle the delete route
     async (req, res) => {
         // Extract token from request headers
         const token = req.headers['token'];
         // Extract hubid and type from the request body
-        const {id, type} = req.body;
+        const { id } = req.params;
+        const { type } = req.body;
 
         try {
             // Use hubInteractorPostgres to attempt delete with the provided hubid and type
-            const hub = await hubInteractorPostgres.delete({hubDeletePersistence}, {token, id, type});
+            const hub = await hubInteractorPostgres.delete({ hubDeletePersistence }, { token, id, type });
             // Send the response with the status and hub data
             res.status(hub.status).send(hub);
         } catch (err) {

@@ -4,7 +4,10 @@ const Device = require('../../framework/db/postgresql/deviceModel');
 const History = require('../../framework/db/postgresql/historyModel');
 
 // Get a history by its ID
-exports.historyGetPersistence = async (token, history) => {
+exports.historyGetPersistence = async (token, history, page, limit) => {
+    const start = (page - 1) * limit;
+    const end = page * limit;
+
     try {
         // Verify the provided token to ensure it's valid
         const decode = jwt.verify(token, process.env.JWT_SECRET);
@@ -34,11 +37,21 @@ exports.historyGetPersistence = async (token, history) => {
         }
 
         // Fetch history for all associated hub IDs
-        const histories = await History.findAll({
+        const result = await History.findAll({
             where: { deviceid: deviceIds }, // Utilize Sequelize's IN query capability
         });
 
-        return { status: 200, message: 'Notification found', data: histories };
+        const paginatedResult = result.slice(start, end);
+
+        return {
+            status: 200,
+            message: "Histories found",
+            data: paginatedResult,
+            total: result.length,
+            page,
+            limit,
+            totalPages: Math.ceil(result.length / limit)
+        };
     } catch (err) {
         return { status: 500, message: err.message };
     }

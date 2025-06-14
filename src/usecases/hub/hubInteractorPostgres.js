@@ -1,12 +1,12 @@
 'use strict';
 
-const {UserEntity} = require('../../entities/UserEntity');
-const {HubEntity} = require('../../entities/HubEntity');
+const { UserEntity } = require('../../entities/UserEntity');
+const { HubEntity } = require('../../entities/HubEntity');
 
-exports.login = async ({hubLoginPersistence}, {id}) => {
+exports.login = async ({ hubLoginPersistence }, { id }) => {
     try {
         // Create a new HubEntity with provided hubid
-        const hub = new HubEntity({id});
+        const hub = new HubEntity({ id });
 
         // Validate the hub
         if (!id) {
@@ -26,10 +26,10 @@ exports.login = async ({hubLoginPersistence}, {id}) => {
     }
 }
 
-exports.add = async ({hubAddPersistence}, {token, id, email}) => {
+exports.add = async ({ hubAddPersistence }, { token, id, email }) => {
     try {
         // Create a new UserEntity with provided hubid and user email
-        const user = new UserEntity({hubid: id, email});
+        const user = new UserEntity({ hubid: id, email });
 
         // Validate the user
         const validation = await user.validate('create');
@@ -50,14 +50,14 @@ exports.add = async ({hubAddPersistence}, {token, id, email}) => {
     }
 }
 
-exports.get = async ({hubGetPersistence}, {token, id}) => {
+exports.get = async ({ hubGetPersistence }, { token, id }) => {
     try {
         // Create a new HubEntity with provided hubid
-        const hub = new HubEntity({id});
+        const hub = new HubEntity({ id });
 
         // Validate the hub
         if (!id) {
-            return { status: 400, message: 'Hub ID is required'};
+            return { status: 400, message: 'Hub ID is required' };
         }
 
         // Attempt to persist hub get and retrieve result
@@ -73,18 +73,21 @@ exports.get = async ({hubGetPersistence}, {token, id}) => {
     }
 }
 
-exports.getall = async ({hubGetPersistence}, {token, email}) => {
+exports.getall = async ({ hubGetPersistence }, { token, email, page, limit }) => {
     try {
         // Create a new UserEntity with provided userid
-        const user = new UserEntity({email});
+        const user = new UserEntity({ email });
 
         // Validate the hub
         if (!email) {
-            return { status: 400, message: 'User email is required'};
+            return { status: 400, message: 'User email is required' };
         }
 
+        limit = parseInt(limit) || 10;
+        page = parseInt(page) || 1;
+
         // Attempt to persist hub getall and retrieve result
-        const result = await hubGetPersistence.getall(token, user);
+        const result = await hubGetPersistence.getall(token, user, page, limit);
 
         // Return the get result
         return result;
@@ -96,10 +99,10 @@ exports.getall = async ({hubGetPersistence}, {token, email}) => {
     }
 }
 
-exports.edit = async ({hubEditPersistence}, {token, id, name, users}) => {
+exports.edit = async ({ hubEditPersistence }, { token, id, name, users }) => {
     try {
         // Create a new HubEntity with provided hubid
-        const hub = new HubEntity({id, name, users});
+        const hub = new HubEntity({ id, name, users });
 
         // Validate the hub
         const validation = await hub.validate();
@@ -120,10 +123,10 @@ exports.edit = async ({hubEditPersistence}, {token, id, name, users}) => {
     }
 }
 
-exports.delete = async ({hubDeletePersistence}, {token, id, type}) => {
+exports.delete = async ({ hubDeletePersistence }, { token, id, type }) => {
     try {
         // Create a new HubEntity with provided hubid
-        const hub = new HubEntity({id, type});
+        const hub = new HubEntity({ id, type });
 
         // Validate the hub
         if (!id, !type) {

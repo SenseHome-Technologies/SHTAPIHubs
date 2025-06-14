@@ -44,7 +44,7 @@ exports.hubDeletePersistence = async (token, hub) => {
             });
         }
 
-         // Respond with success message
+        // Respond with success message
         return { status: 200, message: "Hub deleted successfully" };
 
     } catch (error) {

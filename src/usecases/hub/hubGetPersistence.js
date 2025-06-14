@@ -42,7 +42,10 @@ exports.get = async (token, hub) => {
     }
 }
 
-exports.getall = async (token, user) => {
+exports.getall = async (token, user, page, limit) => {
+    const start = (page - 1) * limit;
+    const end = page * limit;
+
     try {
         // Verify the token using JWT
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -57,7 +60,7 @@ exports.getall = async (token, user) => {
             return { status: 401, message: 'Unauthorized' };
         }
 
-        // Find the hubS based on the user email
+        // Find the hubs based on the user email
         const users = await User.findAll({
             where: { email: decoded.email }
         })
@@ -73,7 +76,7 @@ exports.getall = async (token, user) => {
             return map;
         }, {});
 
-         // Fetch all hubs in a single query
+        // Fetch all hubs in a single query
         const hubIds = Object.keys(hubRolesMap);
         const hubs = await Hub.findAll({
             where: { id: hubIds }
@@ -90,8 +93,18 @@ exports.getall = async (token, user) => {
             role: hubRolesMap[hub.id] // Attach the role from the map
         }));
 
-         // Respond with success message
-        return { status: 200, message: "Hub found", data: hubsWithRoles };
+        const paginatedResult = hubsWithRoles.slice(start, end);
+
+        // Respond with success message
+        return {
+            status: 200,
+            message: "Hubs found",
+            data: paginatedResult,
+            total: hubsWithRoles.length,
+            page,
+            limit,
+            totalPages: Math.ceil(hubsWithRoles.length / limit)
+        };
 
     } catch (error) {
         // Handle any errors during login process

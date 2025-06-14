@@ -29,15 +29,14 @@ exports.divisionCreatePersistence = async (token, division) => {
             return { status: 409, message: 'Division already exists.' };
         }
 
-
         // Create a new division in the database with the provided name and icon
-        const newDivision = await Division.create({
+        const result = await Division.create({
             name: division.name, // Set the name of the new division
             icon: division.icon, // Set the icon of the new division
         });
 
         // Return a success response indicating the division was created successfully
-        return { status: 201, message: 'Division created successfully.', data: newDivision };
+        return { status: 201, message: 'Division created successfully.', data: result };
     } catch (error) {
         console.error(error); // Log any errors that occur during the process
         // Return an error response with the corresponding error message
