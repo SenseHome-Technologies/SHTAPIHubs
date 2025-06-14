@@ -4,21 +4,88 @@ on:
   release:
     types:
       - published
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+env:
+  REGISTRY: docker.io
+  IMAGE_NAME: tinomeister/shtapihubs
 
 jobs:
+  validate-secrets:
+    name: Validate required secrets
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check required secrets
+        run: |
+          echo "Validating required secrets..."
+          if [ -z "${{ secrets.DOCKER_USER }}" ]; then
+            echo "❌ DOCKER_USER secret is missing"
+            exit 1
+          fi
+          if [ -z "${{ secrets.DOCKER_PASS }}" ]; then
+            echo "❌ DOCKER_PASS secret is missing"
+            exit 1
+          fi
+          if [ -z "${{ secrets.DB_HOST }}" ]; then
+            echo "❌ DB_HOST secret is missing"
+            exit 1
+          fi
+          if [ -z "${{ secrets.DB_USER }}" ]; then
+            echo "❌ DB_USER secret is missing"
+            exit 1
+          fi
+          if [ -z "${{ secrets.DB_PASSWORD }}" ]; then
+            echo "❌ DB_PASSWORD secret is missing"
+            exit 1
+          fi
+          if [ -z "${{ secrets.DB_NAME }}" ]; then
+            echo "❌ DB_NAME secret is missing"
+            exit 1
+          fi
+          if [ -z "${{ secrets.DB_PORT }}" ]; then
+            echo "❌ DB_PORT secret is missing"
+            exit 1
+          fi
+          if [ -z "${{ secrets.JWT_SECRET }}" ]; then
+            echo "❌ JWT_SECRET secret is missing"
+            exit 1
+          fi
+          if [ -z "${{ secrets.FIREBASE_PROJECT_ID }}" ]; then
+            echo "❌ FIREBASE_PROJECT_ID secret is missing"
+            exit 1
+          fi
+          if [ -z "${{ secrets.FIREBASE_PRIVATE_KEY }}" ]; then
+            echo "❌ FIREBASE_PRIVATE_KEY secret is missing"
+            exit 1
+          fi
+          if [ -z "${{ secrets.FIREBASE_CLIENT_EMAIL }}" ]; then
+            echo "❌ FIREBASE_CLIENT_EMAIL secret is missing"
+            exit 1
+          fi
+          echo "✅ All required secrets are present"
+
   docker:
-    name: Push Docker image to Docker Hub
-    runs-on: ubuntu-20.04
-    steps:        
+    name: Build and Push Docker image to Docker Hub
+    runs-on: ubuntu-latest
+    needs: validate-secrets
+    permissions:
+      contents: read
+      packages: write
+    steps:
       - name: Check out the repository
-        uses: actions/checkout@v3
-        
+        uses: actions/checkout@v4
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
-        
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-        
+
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
@@ -27,25 +94,75 @@ jobs:
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        uses: docker/metadata-action@v5
         with:
-          images: tinomeister/shtapihubs
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=raw,value=latest,enable={{is_default_branch}}
 
-      - name: Create .env file
+      - name: Create .env file with all required variables
         run: |
-          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
-          echo "DB_USER=${{ secrets.DB_USER }}" >> .env
-          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
-          echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
-          echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+          echo "Creating .env file with all required environment variables..."
+          cat > .env << EOF
+          # Database Configuration
+          DB_HOST=${{ secrets.DB_HOST }}
+          DB_USER=${{ secrets.DB_USER }}
+          DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+          DB_NAME=${{ secrets.DB_NAME }}
+          DB_PORT=${{ secrets.DB_PORT }}
+
+          # JWT Configuration
+          JWT_SECRET=${{ secrets.JWT_SECRET }}
+
+          # Firebase Configuration
+          FIREBASE_PROJECT_ID=${{ secrets.FIREBASE_PROJECT_ID }}
+          FIREBASE_PRIVATE_KEY_ID=${{ secrets.FIREBASE_PRIVATE_KEY_ID }}
+          FIREBASE_PRIVATE_KEY=${{ secrets.FIREBASE_PRIVATE_KEY }}
+          FIREBASE_CLIENT_EMAIL=${{ secrets.FIREBASE_CLIENT_EMAIL }}
+          FIREBASE_CLIENT_ID=${{ secrets.FIREBASE_CLIENT_ID }}
+
+          # Application Configuration
+          PORT=3000
+          NODE_ENV=production
+
+          # API Configuration
+          API_VERSION=2.0.0
+          API_TITLE=SenseHome-Technologies API Hubs
+          EOF
+          echo "✅ .env file created successfully"
         shell: bash
-          
+
       - name: Build and Push Docker Image
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v5
         with:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            NODE_ENV=production
+
+      - name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}
+
+      - name: Verify deployment
+        run: |
+          echo "🎉 Docker image successfully built and pushed!"
+          echo "📦 Image: ${{ env.IMAGE_NAME }}"
+          echo "🏷️  Tags: ${{ steps.meta.outputs.tags }}"
+          echo "📋 Labels: ${{ steps.meta.outputs.labels }}"
+          echo ""
+          echo "🚀 To run the container locally:"
+          echo "docker run -d -p 3000:3000 --env-file .env ${{ env.IMAGE_NAME }}:latest"
+          echo ""
+          echo "🔍 To check the running container:"
+          echo "docker ps"
+          echo "curl http://localhost:3000/api-docs"

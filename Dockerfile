@@ -6,14 +6,17 @@ WORKDIR /app
 
 # Install app dependencies
 COPY package*.json ./
-#RUN npm install
-# Optimized for production (no dev dependencies)
-RUN npm ci --only=production
+
+# Install dependencies optimized for production (no dev dependencies)
+RUN npm ci --only=production && npm cache clean --force
 
 # Copy the application source code and environment file
 COPY src ./src/
 COPY public ./public/
-COPY .env .
+COPY scripts ./scripts/
+
+# Copy the environment file
+COPY .env ./
 
 # Runtime stage 
 FROM node:20.18-alpine as runtime
