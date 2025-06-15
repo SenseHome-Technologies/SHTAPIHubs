@@ -96,11 +96,11 @@ router.route('/hubs').get(
     async (req, res) => {
         // Extract token from request headers
         const token = req.headers['token'];
-        const { page, limit, email } = req.query;
+        const { page, limit } = req.query;
 
         try {
             // Use hubInteractorPostgres to attempt get with the provided email
-            const hub = await hubInteractorPostgres.getall({ hubGetPersistence }, { token, email, page, limit });
+            const hub = await hubInteractorPostgres.getall({ hubGetPersistence }, { token, page, limit });
             // Send the response with the status and hub data
             res.status(hub.status).send(hub);
         } catch (err) {
@@ -111,7 +111,6 @@ router.route('/hubs').get(
         }
     }
 )
-
 
 /**
  * @api {get} /api/hubs/:id Get a hub
@@ -149,7 +148,6 @@ router.route('/hubs/:id').get(
     }
 )
 
-
 /**
  * @api {put} /api/hubs Edit a hub
  * @apiName EditHub
@@ -165,13 +163,15 @@ router.route('/hubs/:id').get(
  * @apiSuccess {Number} hub.status The status of the edit operation
  * @apiSuccess {String} hub.message The message of the edit operation
  */
-router.route('/hubs').put(
+router.route('/hubs/:id').put(
     // Define an asynchronous function to handle the edit route
     async (req, res) => {
         // Extract token from request headers
         const token = req.headers['token'];
+        // Extract hubid from the request params
+        const { id } = req.params;
         // Extract hubid from the request body
-        const { id, name, users } = req.body;
+        const { name, users } = req.body;
 
         try {
             // Use hubInteractorPostgres to attempt edit with the provided hubid, name and users

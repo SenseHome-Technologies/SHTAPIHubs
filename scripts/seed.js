@@ -165,13 +165,17 @@ class DatabaseSeeder {
 
         this.hubs = [];
         for (let i = 0; i < CONFIG.HUBS; i++) {
+            const latitude = getRandomFloat(37.0, 41.0);
+            const longitude = getRandomFloat(-9.0, -6.0);
             const city = getRandomElement(PORTUGUESE_CITIES);
             const hubName = `Hub ${city} ${i + 1}`;
 
             const hub = await Hub.create({
                 name: hubName,
                 discoveryflag: getRandomInt(0, 1),
-                role: 'Hub'
+                role: 'Hub',
+                latitude,
+                longitude
             });
 
             this.hubs.push(hub);

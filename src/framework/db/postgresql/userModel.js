@@ -2,7 +2,7 @@
 const { DataTypes } = require('sequelize');
 const db = require('./config');
 
-const UserHub = db.define('User', {
+const User = db.define('User', {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
@@ -30,4 +30,4 @@ const UserHub = db.define('User', {
 });
 
 
-module.exports = UserHub;
+module.exports = User;

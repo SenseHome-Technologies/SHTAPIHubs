@@ -23,7 +23,13 @@ exports.get = async (token, hub) => {
         }
 
         // Get hub
-        const hubRecord = await Hub.findByPk(hub.id);
+        const hubRecord = await Hub.findByPk(hub.id, {
+            include: [{
+                model: User,
+                as: 'users',
+                attributes: ['email', 'role']
+            }]
+        });
 
         // Validate if hub exists
         if (!hubRecord) {
@@ -33,7 +39,7 @@ exports.get = async (token, hub) => {
         // Set role in hub
         hubRecord.role = user.role;
 
-         // Respond with success message
+        // Respond with success message
         return { status: 200, message: "Hub found", data: hubRecord };
 
     } catch (error) {
@@ -42,7 +48,7 @@ exports.get = async (token, hub) => {
     }
 }
 
-exports.getall = async (token, user, page, limit) => {
+exports.getall = async (token, page, limit) => {
     const start = (page - 1) * limit;
     const end = page * limit;
 
@@ -53,11 +59,6 @@ exports.getall = async (token, user, page, limit) => {
         // Verify permissions of token
         if (decoded.role !== 'User') {
             return { status: 400, message: 'You are not authorized to get this hub' };
-        }
-
-        // Verify userid with decoded email
-        if (decoded.email !== user.email) {
-            return { status: 401, message: 'Unauthorized' };
         }
 
         // Find the hubs based on the user email
@@ -79,7 +80,12 @@ exports.getall = async (token, user, page, limit) => {
         // Fetch all hubs in a single query
         const hubIds = Object.keys(hubRolesMap);
         const hubs = await Hub.findAll({
-            where: { id: hubIds }
+            where: { id: hubIds },
+            include: [{
+                model: User,
+                as: 'users',
+                attributes: ['email', 'role']
+            }]
         });
 
         // Validate if hub exists

@@ -42,7 +42,7 @@ exports.get = async (token, hub) => {
 };
 
 
-exports.all = async (token) => {
+exports.getall = async (token) => {
     try {
         const decode = jwt.verify(token, process.env.JWT_SECRET);
 
@@ -58,10 +58,10 @@ exports.all = async (token) => {
         })
 
         // Extract unique hub IDs and map roles
-            const hubRolesMap = users.reduce((map, user) => {
-                map[user.hubid] = user.role;
-                return map;
-            }, {});
+        const hubRolesMap = users.reduce((map, user) => {
+            map[user.hubid] = user.role;
+            return map;
+        }, {});
 
         // Get all devices for the hub
         const hubIds = Object.keys(hubRolesMap);

@@ -2,6 +2,8 @@
 const { DataTypes } = require('sequelize');
 const db = require('./config');
 
+const User = require('./userModel');
+
 const Hub = db.define('Hub', {
     id: {
         type: DataTypes.UUID,
@@ -23,8 +25,20 @@ const Hub = db.define('Hub', {
     },
 }, {
     tableName: 'hubs',
-    timestamps: false
+    timestamps: false,
 });
 
+// Hub has many User
+Hub.hasMany(User, {
+    foreignKey: 'hubid',
+    as: 'users',
+});
+
+// User belongs to Hub
+User.belongsTo(Hub, {
+    foreignKey: 'hubid',
+    as: 'hubs',
+});
 
 module.exports = Hub;
+

@@ -73,21 +73,13 @@ exports.get = async ({ hubGetPersistence }, { token, id }) => {
     }
 }
 
-exports.getall = async ({ hubGetPersistence }, { token, email, page, limit }) => {
+exports.getall = async ({ hubGetPersistence }, { token, page, limit }) => {
     try {
-        // Create a new UserEntity with provided userid
-        const user = new UserEntity({ email });
-
-        // Validate the hub
-        if (!email) {
-            return { status: 400, message: 'User email is required' };
-        }
-
         limit = parseInt(limit) || 10;
         page = parseInt(page) || 1;
 
         // Attempt to persist hub getall and retrieve result
-        const result = await hubGetPersistence.getall(token, user, page, limit);
+        const result = await hubGetPersistence.getall(token, page, limit);
 
         // Return the get result
         return result;

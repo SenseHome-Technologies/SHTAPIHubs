@@ -95,15 +95,13 @@ router.route('/devices').post(
  * @apiSuccess {Number} device.status The status of the devices
  * @apiSuccess {String} device.message The message of the devices
  */
-router.route('/devices/').get(
+router.route('/devices').get(
     // Define an asynchronous function to handle the get route
     async (req, res) => {
         // Extract token from request headers
         const token = req.headers['token'];
         // Extract data from the request query
         const { page, limit, favorite } = req.query;
-
-        console.log("ENTER HERE");
 
         try {
             // Use deviceInteractorPostgres to attempt get with the provided hubid

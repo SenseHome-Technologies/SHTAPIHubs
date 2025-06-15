@@ -1,7 +1,7 @@
 'use strict';
 const divisionInteractorPostgres = require('../../usecases/division/divisionInteractorPostgres');
 const { divisionCreatePersistence } = require('../../usecases/division/divisionCreatePersistence');
-const { divisionGetPersistence } = require('../../usecases/division/divisionGetPersistence');
+const divisionGetPersistence = require('../../usecases/division/divisionGetPersistence');
 const { divisionEditPersistence } = require('../../usecases/division/divisionEditPersistence');
 const { divisionDeletePersistence } = require('../../usecases/division/divisionDeletePersistence');
 const router = require('express').Router();

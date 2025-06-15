@@ -84,7 +84,7 @@ exports.gethuball = async ({ deviceGetPersistence }, { token, hubid, page, limit
 
         limit = parseInt(limit) || 10;
         page = parseInt(page) || 1;
-        favorite = parseInt(favorite) || undefined;
+        favorite = favorite || undefined;
 
         // Attempt to persist device get and retrieve result
         const result = await deviceGetPersistence.gethuball(token, hub, page, limit, favorite);
@@ -103,7 +103,7 @@ exports.getall = async ({ deviceGetPersistence }, { token, page, limit, favorite
     try {
         limit = parseInt(limit) || 10;
         page = parseInt(page) || 1;
-        favorite = parseInt(favorite) || undefined;
+        favorite = favorite || undefined;
 
         // Attempt to persist device get and retrieve result
         const result = await deviceGetPersistence.getall(token, page, limit, favorite);

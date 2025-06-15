@@ -67,6 +67,8 @@ class NotificationService {
             // Fetch FCM tokens from the other API
             const fcmTokens = await this.fetchFCMTokensFromAPI(jwtToken, users);
 
+            console.log(fcmTokens);
+
             if (fcmTokens.length === 0) {
                 console.log(`No FCM tokens available for hub ${hubId}`);
                 // Still create the notification in the database even if no FCM tokens
