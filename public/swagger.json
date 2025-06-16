@@ -1653,319 +1653,8 @@
                     }
                 }
             }
-        }
-        "/api/devices/{id}": {
-            "put": {
-                "tags": [
-                    "Device"
-                ],
-                "summary": "Edit a device",
-                "description": "Update device properties. Automatically sends Firebase notifications to all hub users when device is updated.",
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        },
-                        "description": "Device ID"
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/EditDevice"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Device updated successfully. Firebase notifications sent to all hub users.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/DeviceResponse"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid input data",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Device not found",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
         },
-        "/api/notifications": {
-            "post": {
-                "tags": [
-                    "Notification"
-                ],
-                "summary": "Create a notification",
-                "description": "Create a new notification in the system",
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/CreateNotification"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Notification created successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/NotificationResponse"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid input data",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "get": {
-                "tags": [
-                    "Notification"
-                ],
-                "summary": "Get all notifications with pagination",
-                "description": "Retrieve all notifications with pagination support",
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "parameters": [
-                    {
-                        "name": "page",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "integer",
-                            "minimum": 1,
-                            "default": 1
-                        },
-                        "description": "Page number for pagination"
-                    },
-                    {
-                        "name": "limit",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "integer",
-                            "minimum": 1,
-                            "maximum": 100,
-                            "default": 15
-                        },
-                        "description": "Number of notifications per page"
-                    },
-                    {
-                        "name": "date",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "format": "date"
-                        },
-                        "description": "Filter by date"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Notifications retrieved successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "status": {
-                                            "type": "integer",
-                                            "example": 200
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Notifications retrieved successfully"
-                                        },
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/components/schemas/Notification"
-                                            }
-                                        },
-                                        "pagination": {
-                                            "$ref": "#/components/schemas/PaginationInfo"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/api/notifications/{hubid}": {
-            "get": {
-                "tags": [
-                    "Notification"
-                ],
-                "summary": "Get all notifications for a hub",
-                "description": "Retrieve all notifications for a specific hub with pagination support",
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "parameters": [
-                    {
-                        "name": "hubid",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "format": "uuid"
-                        },
-                        "description": "Hub ID"
-                    },
-                    {
-                        "name": "page",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "integer",
-                            "minimum": 1,
-                            "default": 1
-                        },
-                        "description": "Page number for pagination"
-                    },
-                    {
-                        "name": "limit",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "integer",
-                            "minimum": 1,
-                            "maximum": 100,
-                            "default": 15
-                        },
-                        "description": "Number of notifications per page"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Notifications retrieved successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "status": {
-                                            "type": "integer",
-                                            "example": 200
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Notifications retrieved successfully"
-                                        },
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/components/schemas/Notification"
-                                            }
-                                        },
-                                        "pagination": {
-                                            "$ref": "#/components/schemas/PaginationInfo"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/api/devicetypes/get": {
+        "/api/devicetypes": {
             "get": {
                 "tags": [
                     "Types"
@@ -2002,7 +1691,7 @@
                 }
             }
         },
-        "/api/history/get/{hubid}": {
+        "/api/histories/{hubid}": {
             "get": {
                 "tags": [
                     "History"
@@ -2998,6 +2687,94 @@
                     "name",
                     "icon",
                     "hubid"
+                ]
+            },
+            "UpdateDevice": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "Device name",
+                        "example": "Luz LED Sala 1"
+                    },
+                    "accesscode": {
+                        "type": "string",
+                        "description": "Device access code",
+                        "example": "ABC12345"
+                    },
+                    "type": {
+                        "type": "integer",
+                        "description": "Device type ID",
+                        "example": 1
+                    },
+                    "state": {
+                        "type": "integer",
+                        "description": "Device state (0 or 1)",
+                        "example": 1
+                    },
+                    "favorite": {
+                        "type": "integer",
+                        "description": "Favorite status (0 or 1)",
+                        "example": 1
+                    },
+                    "value": {
+                        "type": "number",
+                        "format": "float",
+                        "description": "Device value",
+                        "example": 75.5
+                    },
+                    "hubid": {
+                        "type": "string",
+                        "format": "uuid",
+                        "description": "Hub ID",
+                        "example": "123e4567-e89b-12d3-a456-426614174000"
+                    },
+                    "divisionid": {
+                        "type": "integer",
+                        "description": "Division ID",
+                        "example": 1
+                    }
+                }
+            },
+            "UpdateDivision": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "Division name",
+                        "example": "Sala de Estar"
+                    },
+                    "icon": {
+                        "type": "string",
+                        "description": "Division icon",
+                        "example": "🛋️"
+                    },
+                    "hubid": {
+                        "type": "string",
+                        "format": "uuid",
+                        "description": "Hub ID",
+                        "example": "123e4567-e89b-12d3-a456-426614174000"
+                    }
+                }
+            },
+            "DivisionResponse": {
+                "type": "object",
+                "properties": {
+                    "status": {
+                        "type": "integer",
+                        "example": 200
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Division operation successful"
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/Division"
+                    }
+                },
+                "required": [
+                    "status",
+                    "message"
                 ]
             },
             "EditDivision": {
