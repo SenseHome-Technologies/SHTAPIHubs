@@ -126,6 +126,8 @@ jobs:
           FIREBASE_CLIENT_EMAIL=${{ secrets.FIREBASE_CLIENT_EMAIL }}
           FIREBASE_CLIENT_ID=${{ secrets.FIREBASE_CLIENT_ID }}
 
+          API_USERS_URL=${{ secrets.API_USERS_URL }}
+
           # Application Configuration
           PORT=3000
           NODE_ENV=production
