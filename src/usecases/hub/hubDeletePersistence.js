@@ -4,6 +4,8 @@ const User = require('../../framework/db/postgresql/userModel');
 
 exports.hubDeletePersistence = async (token, hub) => {
     try {
+        console.log(hub);
+
         // Verify the token using JWT
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 

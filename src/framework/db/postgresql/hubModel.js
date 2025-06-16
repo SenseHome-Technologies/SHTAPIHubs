@@ -23,6 +23,14 @@ const Hub = db.define('Hub', {
         type: DataTypes.ENUM('Hub'),
         defaultValue: 'Hub',
     },
+    latitude: {
+        type: DataTypes.FLOAT,
+        allowNull: true,
+    },
+    longitude: {
+        type: DataTypes.FLOAT,
+        allowNull: true,
+    },
 }, {
     tableName: 'hubs',
     timestamps: false,

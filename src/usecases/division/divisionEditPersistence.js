@@ -1,31 +1,30 @@
 const jwt = require('jsonwebtoken'); // Import jsonwebtoken for token verification
 const User = require('../../framework/db/postgresql/userModel'); // Import User model from database
-const Device = require('../../framework/db/postgresql/deviceModel'); // Import User model from database
 const Division = require('../../framework/db/postgresql/divisionModel'); // Import Division model from database
-const { validateAccess } = require('./util/tokenUtil');
 
 exports.divisionEditPersistence = async (token, division) => {
     try {
-        // Validate user access (token and hubid)
-        const userAccess = await validateAccess("Admin", token, division.hubid);
+        // Decode the token using JWT
+        const decode = jwt.verify(token, process.env.JWT_SECRET);
 
-        if (userAccess.status !== 200) {
-            return userAccess; // If user validation fails, return the error response
+        // Verify if the user role is 'Hub'
+        if (decode.role !== 'User') {
+            return { status: 400, message: 'Only Users can edit Divisions' };
         }
 
-        // Check if the division exists
-        const existingDivision = await Division.findOne({
-            where: { id: division.id },
-            include: {
-                model: Device,
-                as: 'devices',
-                where: { hubid: division.hubid }
-            }
-        })
+        // Find user associated with the provided email and hubid
+        const userRecord = await User.findOne({
+            where: { email: decode.email, hubid: division.hubid }
+        });
 
-        // Validate if the division exists
-        if (!existingDivision) {
-            return { status: 400, message: 'Division not found.' };
+        // Check if user exists
+        if (!userRecord) {
+            return { status: 404, message: 'User not found' };
+        }
+
+        // Handle 'Admin' type access
+        if (userRecord.role !== 'Admin') {
+            return { status: 403, message: 'Only Admins can perform this action' };
         }
 
         // Fetch the division to edit from the database by its ID

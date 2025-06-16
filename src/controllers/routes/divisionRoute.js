@@ -46,43 +46,6 @@ router.route('/divisions').post(
 );
 
 /**
- * @api {get} /api/divisions Get all divisions
- * @apiName GetDivisions
- * @apiGroup Division
- * @apiDescription Retrieve all divisions
- *
- * @apiHeader {String} token The user's token
- *
- * @apiSuccess {Object} division The retrieved divisions
- * @apiSuccess {Number} division.status The status of the divisions
- * @apiSuccess {String} division.message The message of the divisions
- */
-router.route('/divisions').get(
-    /**
-     * Get a division by its ID
-     *
-     * @param {Object} req The request object
-     * @param {Object} res The response object
-     */
-    async (req, res) => {
-        const token = req.headers['token'];
-
-        try {
-            // Attempt to get the division with the provided hubid
-            const division = await divisionInteractorPostgres.getall({ divisionGetPersistence }, { token });
-
-            // Send the response with the status and division data
-            res.status(division.status).send(division);
-        } catch (err) {
-            // Log any errors that occur during the get process
-            console.log(err);
-            // Rethrow the error to be handled by the caller
-            throw err;
-        }
-    }
-);
-
-/**
  * @api {get} /api/divisions/:hubid Get a division
  * @apiName GetDivision
  * @apiGroup Division
@@ -122,7 +85,7 @@ router.route('/divisions/:hubid').get(
 );
 
 /**
- * @api {put} /api/divisions Edit a division
+ * @api {put} /api/divisions/:id Edit a division
  * @apiName EditDivision
  * @apiGroup Division
  * @apiDescription Edit a division by its ID
@@ -137,13 +100,15 @@ router.route('/divisions/:hubid').get(
  * @apiSuccess {Number} division.status The status of the division
  * @apiSuccess {String} division.message The message of the division
  */
-router.route('/divisions').put(
+router.route('/divisions/:id').put(
     // Define an asynchronous function to handle the edit route
     async (req, res) => {
         // Extract token from request headers
         const token = req.headers['token'];
+        // Extract divisionid from the request body
+        const { id } = req.params;
         // Extract division data from the request body
-        const { id, name, icon, hubid } = req.body;
+        const { name, icon, hubid } = req.body;
 
         try {
             // Use divisionInteractorPostgres to attempt edit with the provided data
@@ -179,11 +144,10 @@ router.route('/divisions/:id').delete(
         const token = req.headers['token'];
         // Extract divisionid from the request body
         const { id } = req.params;
-        const { hubid } = req.body;
 
         try {
             // Use divisionInteractorPostgres to attempt delete with the provided divisionid
-            const division = await divisionInteractorPostgres.delete({ divisionDeletePersistence }, { token, id, hubid });
+            const division = await divisionInteractorPostgres.delete({ divisionDeletePersistence }, { token, id });
             // Send the response with the status and division data
             res.status(division.status).send(division);
         } catch (err) {

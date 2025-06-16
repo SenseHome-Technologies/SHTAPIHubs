@@ -24,6 +24,14 @@ const History = db.define('History', {
         type: DataTypes.DATE,
         allowNull: false,
     },
+    hubid: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        references: {
+            model: 'hubs',
+            key: 'id',
+        },
+    },
 }, {
     tableName: 'histories',
     timestamps: false,

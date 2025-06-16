@@ -1,26 +1,38 @@
 const jwt = require('jsonwebtoken'); // Import jsonwebtoken for token verification
 const User = require('../../framework/db/postgresql/userModel'); // Import User model from database
-const Device = require('../../framework/db/postgresql/deviceModel'); // Import Device model from database
 const Division = require('../../framework/db/postgresql/divisionModel'); // Import Division model from database
-const { validateAccess } = require('./util/tokenUtil');
 
 // Function to handle the persistence logic for creating a division
 exports.divisionCreatePersistence = async (token, division) => {
     try {
-        // Validate user access (token and hubid)
-        const userAccess = await validateAccess("Admin", token, division.hubid);
+        // Decode the token using JWT
+        const decode = jwt.verify(token, process.env.JWT_SECRET);
 
-        if (userAccess.status !== 200) {
-            return userAccess; // If user validation fails, return the error response
+        // Verify if the user role is 'Hub'
+        if (decode.role !== 'User') {
+            return { status: 400, message: 'Only Users can create Divisions' };
+        }
+
+        // Find user associated with the provided email and hubid
+        const userRecord = await User.findOne({
+            where: { email: decode.email, hubid: division.hubid }
+        });
+
+        // Check if user exists
+        if (!userRecord) {
+            return { status: 404, message: 'User not found' };
+        }
+
+        // Handle 'Admin' type access
+        if (userRecord.role !== 'Admin') {
+            return { status: 403, message: 'Only Admins can perform this action' };
         }
 
         // Check if a division with the same name already exists in the database
         const existingDivision = await Division.findOne({
-            where: { name: division.name },
-            include: {
-                model: Device,
-                as: 'devices',
-                where: { hubid: division.hubid }
+            where: {
+                name: division.name,
+                hubid: division.hubid
             }
         })
 
@@ -33,6 +45,7 @@ exports.divisionCreatePersistence = async (token, division) => {
         const result = await Division.create({
             name: division.name, // Set the name of the new division
             icon: division.icon, // Set the icon of the new division
+            hubid: division.hubid // Set the hubid of the new division
         });
 
         // Return a success response indicating the division was created successfully

@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../../framework/db/postgresql/userModel');
 const Hub = require('../../framework/db/postgresql/hubModel');
 const Device = require('../../framework/db/postgresql/deviceModel');
+const Division = require('../../framework/db/postgresql/divisionModel');
 
 exports.get = async (token, device) => {
     try {
@@ -48,6 +49,56 @@ exports.gethuball = async (token, hub, page, limit, favorite) => {
         const devices = await Device.findAll({
             where: {
                 hubid: hub.id
+            }
+        })
+
+        if (favorite != undefined) {
+            devices = devices.filter(device => device.favorite === favorite);
+        }
+
+        const paginatedResult = devices.slice(start, end);
+
+        // Respond with success message
+        return {
+            status: 200,
+            message: "Devices found",
+            data: paginatedResult,
+            total: devices.length,
+            page,
+            limit,
+            totalPages: Math.ceil(devices.length / limit)
+        };
+    } catch (error) {
+        // Handle any errors during login process
+        return { status: 500, message: error.message };
+    }
+}
+
+exports.getdivisionall = async (token, division, page, limit, favorite) => {
+    const start = (page - 1) * limit;
+    const end = page * limit;
+
+    try {
+        // Verify the token using JWT
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        // Verify userid with decoded email
+        if (decoded.role !== 'User') {
+            return { status: 401, message: 'Unauthorized' };
+        }
+
+        // Find the hub based on the id
+        const divisionRecord = await Division.findByPk(division.id);
+
+        // Validate if hub exists
+        if (!divisionRecord) {
+            return { status: 400, message: 'Division not found' };
+        }
+
+        // Get all devices for the hub
+        const devices = await Device.findAll({
+            where: {
+                divisionid: division.id
             }
         })
 

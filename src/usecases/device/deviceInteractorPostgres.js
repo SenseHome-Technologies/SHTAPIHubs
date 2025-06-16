@@ -2,6 +2,7 @@
 
 const { HubEntity } = require('../../entities/HubEntity');
 const { DeviceEntity } = require('../../entities/DeviceEntity');
+const { DivisionEntity } = require('../../entities/DivisionEntity');
 
 exports.add = async ({ deviceAddPersistence }, { token, hubid }) => {
     try {
@@ -88,6 +89,33 @@ exports.gethuball = async ({ deviceGetPersistence }, { token, hubid, page, limit
 
         // Attempt to persist device get and retrieve result
         const result = await deviceGetPersistence.gethuball(token, hub, page, limit, favorite);
+
+        // Return the get result
+        return result;
+    } catch (err) {
+        // Log any errors that occur during the process
+        console.error(err);
+        // Rethrow the error to be handled by the caller
+        throw err;
+    }
+}
+
+exports.getdivisionall = async ({ deviceGetPersistence }, { token, divisionid, page, limit, favorite }) => {
+    try {
+        // Create a new HubEntity with provided hubid
+        const division = new DivisionEntity({ id: divisionid });
+
+        // Validate the hub
+        if (!divisionid) {
+            return { status: 400, message: 'Division ID is required' };
+        }
+
+        limit = parseInt(limit) || 10;
+        page = parseInt(page) || 1;
+        favorite = favorite || undefined;
+
+        // Attempt to persist device get and retrieve result
+        const result = await deviceGetPersistence.getdivisionall(token, division, page, limit, favorite);
 
         // Return the get result
         return result;

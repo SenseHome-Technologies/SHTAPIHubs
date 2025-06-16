@@ -84,6 +84,11 @@ exports.hubEditPersistence = async (token, hub) => {
             await User.destroy({ where: { id: listToDelete } });
         }
 
+        // Update hub name
+        await hubRecord.update({
+            name: hub.name
+        });
+
         // Respond with success message
         return { status: 200, message: 'Hub updated successfully' };
 

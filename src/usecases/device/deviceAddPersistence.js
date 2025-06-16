@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken');
 const Hub = require('../../framework/db/postgresql/hubModel');
 const User = require('../../framework/db/postgresql/userModel');
+const DeviceType = require('../../framework/db/postgresql/deviceTypeModel');
+const Device = require('../../framework/db/postgresql/deviceModel');
 
 exports.deviceAddPersistence = async (token, hub) => {
     try {
@@ -34,10 +36,24 @@ exports.deviceAddPersistence = async (token, hub) => {
             return { status: 400, message: 'You are not authorized to add devices' };
         }
 
-        // Update the hub in the database
-        await hubRecord.update({
-            discoveryflag: 1
+        const firstDeviceType = await DeviceType.findOne({
+            order: [['id', 'ASC']]
         });
+
+        // Create a new device entry in the database
+        await Device.create({
+            name: 'New Device',
+            accesscode: 'NEWDEVICE',
+            type: firstDeviceType.id,
+            state: 0,
+            value: 0,
+            hubid: hubRecord.id
+        });
+
+        // Update the hub in the database
+        // await hubRecord.update({
+        //     discoveryflag: 1
+        // });
 
         // Respond with success message
         return { status: 200, message: "Device will be discovered" };

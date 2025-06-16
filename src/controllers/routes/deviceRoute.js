@@ -153,6 +153,30 @@ router.route('/devices/hub/:hubid').get(
     }
 )
 
+router.route('/devices/division/:divisionid').get(
+    // Define an asynchronous function to handle the get route
+    async (req, res) => {
+        // Extract token from request headers
+        const token = req.headers['token'];
+        // Extract data from the request query
+        const { page, limit, favorite } = req.query;
+        // Extract divisionid from the request params
+        const { divisionid } = req.params;
+
+        try {
+            // Use deviceInteractorPostgres to attempt get with the provided divisionid
+            const device = await deviceInteractorPostgres.getdivisionall({ deviceGetPersistence }, { token, divisionid, page, limit, favorite });
+            // Send the response with the status and device data
+            res.status(device.status).send(device);
+        } catch (err) {
+            // Log any errors that occur during the add process
+            console.log(err);
+            // Rethrow the error to be handled by the caller
+            throw err;
+        }
+    }
+)
+
 /**
  * @api {get} /api/devices/:id Get a device by ID
  * @apiName GetDeviceByID

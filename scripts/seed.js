@@ -32,41 +32,51 @@ const CONFIG = {
     DEVICES_PER_HUB: 20,        // 20 dispositivos por hub (500 dispositivos total)
     NOTIFICATIONS_PER_HUB: 12,  // 12 notificações por hub (300 notificações total)
     HISTORY_RECORDS_PER_DEVICE: 15, // 15 registros de histórico por dispositivo (7500 registros total)
-    DEVICE_TYPES: 15,           // 15 tipos de dispositivos
-    DIVISIONS: 10               // 10 divisões
+    DEVICE_TYPES: 20,           // 20 tipos de dispositivos
+    DIVISIONS: 15               // 15 divisões
 };
 
 // Device types data
 const DEVICE_TYPES = [
-    { name: 'Smart Light', icon: 'lightbulb' },
-    { name: 'Temperature Sensor', icon: 'thermometer' },
-    { name: 'Motion Detector', icon: 'motion' },
-    { name: 'Door Lock', icon: 'lock' },
-    { name: 'Security Camera', icon: 'camera' },
-    { name: 'Smart Thermostat', icon: 'thermostat' },
-    { name: 'Smoke Detector', icon: 'smoke' },
-    { name: 'Window Sensor', icon: 'window' },
-    { name: 'Smart Switch', icon: 'switch' },
-    { name: 'Air Quality Monitor', icon: 'air' },
-    { name: 'Smart Plug', icon: 'plug' },
-    { name: 'Water Leak Sensor', icon: 'water' },
-    { name: 'Smart Doorbell', icon: 'doorbell' },
-    { name: 'Garage Door Opener', icon: 'garage' },
-    { name: 'Smart Speaker', icon: 'speaker' }
+    { name: 'Luz LED', icon: '💡' },
+    { name: 'Sensor de Temperatura', icon: '🌡️' },
+    { name: 'Sensor de Humidade', icon: '💧' },
+    { name: 'Tomada Inteligente', icon: '🔌' },
+    { name: 'Câmera de Segurança', icon: '📹' },
+    { name: 'Sensor de Movimento', icon: '🚶' },
+    { name: 'Termostato', icon: '🎛️' },
+    { name: 'Fechadura Inteligente', icon: '🔐' },
+    { name: 'Sensor de Fumo', icon: '🚨' },
+    { name: 'Alto-falante Inteligente', icon: '🔊' },
+    { name: 'Sensor de Porta/Janela', icon: '🚪' },
+    { name: 'Dimmer', icon: '🔆' },
+    { name: 'Ventilador Inteligente', icon: '🌀' },
+    { name: 'Sensor de Qualidade do Ar', icon: '🌬️' },
+    { name: 'Irrigador Automático', icon: '🌱' },
+    { name: 'Persiana Automática', icon: '🪟' },
+    { name: 'Sensor de Presença', icon: '👁️' },
+    { name: 'Medidor de Energia', icon: '⚡' },
+    { name: 'Válvula de Água', icon: '🚰' },
+    { name: 'Sensor de Vibração', icon: '📳' }
 ];
 
 // Divisions data
 const DIVISIONS = [
-    { name: 'Living Room', icon: 'sofa' },
-    { name: 'Kitchen', icon: 'kitchen' },
-    { name: 'Bedroom', icon: 'bed' },
-    { name: 'Bathroom', icon: 'bath' },
-    { name: 'Office', icon: 'desk' },
-    { name: 'Garage', icon: 'car' },
-    { name: 'Garden', icon: 'tree' },
-    { name: 'Basement', icon: 'basement' },
-    { name: 'Attic', icon: 'attic' },
-    { name: 'Hallway', icon: 'hallway' }
+    { name: 'Sala de Estar', icon: '🛋️' },
+    { name: 'Cozinha', icon: '🍳' },
+    { name: 'Quarto Principal', icon: '🛏️' },
+    { name: 'Casa de Banho', icon: '🚿' },
+    { name: 'Escritório', icon: '💼' },
+    { name: 'Garagem', icon: '🚗' },
+    { name: 'Jardim', icon: '🌳' },
+    { name: 'Cave', icon: '🏠' },
+    { name: 'Sótão', icon: '🏚️' },
+    { name: 'Corredor', icon: '🚪' },
+    { name: 'Quarto de Hóspedes', icon: '🛌' },
+    { name: 'Lavandaria', icon: '🧺' },
+    { name: 'Despensa', icon: '📦' },
+    { name: 'Varanda', icon: '🌅' },
+    { name: 'Terraço', icon: '🏖️' }
 ];
 
 // Utility functions
@@ -102,8 +112,8 @@ class DatabaseSeeder {
 
             // Seed data in order (respecting foreign key constraints)
             await this.seedDeviceTypes();
-            await this.seedDivisions();
             await this.seedHubs();
+            await this.seedDivisions();
             await this.seedUsers();
             await this.seedDevices();
             await this.seedNotifications();
@@ -155,9 +165,23 @@ class DatabaseSeeder {
     async seedDivisions() {
         console.log('🏠 Criando divisões...');
 
-        this.divisions = await Division.bulkCreate(DIVISIONS);
+        this.divisions = [];
+        const divisionsData = [];
 
-        console.log(`✅ ${this.divisions.length} divisões criadas.\n`);
+        // Create divisions for each hub
+        for (const hub of this.hubs) {
+            for (const divisionTemplate of DIVISIONS) {
+                divisionsData.push({
+                    name: divisionTemplate.name,
+                    icon: divisionTemplate.icon,
+                    hubid: hub.id
+                });
+            }
+        }
+
+        this.divisions = await Division.bulkCreate(divisionsData);
+
+        console.log(`✅ ${this.divisions.length} divisões criadas (${DIVISIONS.length} por hub).\n`);
     }
 
     async seedHubs() {
@@ -165,10 +189,10 @@ class DatabaseSeeder {
 
         this.hubs = [];
         for (let i = 0; i < CONFIG.HUBS; i++) {
-            const latitude = getRandomFloat(37.0, 41.0);
-            const longitude = getRandomFloat(-9.0, -6.0);
             const city = getRandomElement(PORTUGUESE_CITIES);
             const hubName = `Hub ${city} ${i + 1}`;
+            const latitude = getRandomFloat(37.0, 41.0);
+            const longitude = getRandomFloat(-9.0, -6.0);
 
             const hub = await Hub.create({
                 name: hubName,
@@ -180,6 +204,16 @@ class DatabaseSeeder {
 
             this.hubs.push(hub);
         }
+
+        const testHub = await Hub.create({
+            name: "Hub Test",
+            discoveryflag: 0,
+            role: 'Hub',
+            latitude: getRandomFloat(37.0, 41.0),
+            longitude: getRandomFloat(-9.0, -6.0)
+        });
+
+        this.hubs.push(testHub);
 
         console.log(`✅ ${this.hubs.length} hubs criados.\n`);
     }
@@ -202,6 +236,12 @@ class DatabaseSeeder {
             }
         }
 
+        usersData.push({
+            email: 'tiagooliveira869@gmail.com',
+            hubid: this.hubs[0].id,
+            role: 'Admin'
+        })
+
         this.users = await User.bulkCreate(usersData);
 
         console.log(`✅ ${this.users.length} utilizadores criados.\n`);
@@ -214,9 +254,12 @@ class DatabaseSeeder {
         let deviceCount = 0;
 
         for (const hub of this.hubs) {
+            // Get divisions for this specific hub
+            const hubDivisions = this.divisions.filter(div => div.hubid === hub.id);
+
             for (let i = 0; i < CONFIG.DEVICES_PER_HUB; i++) {
                 const deviceType = getRandomElement(this.deviceTypes);
-                const division = getRandomElement(this.divisions);
+                const division = getRandomElement(hubDivisions);
                 const deviceName = `${deviceType.name} ${division.name} ${i + 1}`;
 
                 try {
@@ -292,7 +335,6 @@ class DatabaseSeeder {
     async seedHistory() {
         console.log('📊 Criando histórico de dispositivos...');
 
-        const historyData = [];
         let batchSize = 1000; // Process in batches to avoid memory issues
         let totalRecords = 0;
 
@@ -311,14 +353,24 @@ class DatabaseSeeder {
                     let value;
                     const deviceTypeName = this.deviceTypes.find(dt => dt.id === device.type)?.name || '';
 
-                    if (deviceTypeName.includes('Temperature')) {
+                    if (deviceTypeName.includes('Temperatura')) {
                         value = getRandomFloat(15, 35); // Temperature in Celsius
-                    } else if (deviceTypeName.includes('Light') || deviceTypeName.includes('Switch')) {
+                    } else if (deviceTypeName.includes('Humidade')) {
+                        value = getRandomFloat(30, 80); // Humidity percentage
+                    } else if (deviceTypeName.includes('Luz') || deviceTypeName.includes('Dimmer')) {
+                        value = getRandomInt(0, 100); // Brightness percentage
+                    } else if (deviceTypeName.includes('Tomada') || deviceTypeName.includes('Fechadura')) {
                         value = getRandomInt(0, 1); // On/Off
-                    } else if (deviceTypeName.includes('Air Quality')) {
-                        value = getRandomFloat(0, 500); // AQI
-                    } else if (deviceTypeName.includes('Motion') || deviceTypeName.includes('Door') || deviceTypeName.includes('Window')) {
+                    } else if (deviceTypeName.includes('Movimento') || deviceTypeName.includes('Presença') || deviceTypeName.includes('Porta') || deviceTypeName.includes('Fumo') || deviceTypeName.includes('Vibração')) {
                         value = getRandomInt(0, 1); // Detected/Not detected
+                    } else if (deviceTypeName.includes('Qualidade do Ar')) {
+                        value = getRandomFloat(0, 500); // AQI
+                    } else if (deviceTypeName.includes('Energia')) {
+                        value = getRandomFloat(0, 5000); // Watts
+                    } else if (deviceTypeName.includes('Termostato')) {
+                        value = getRandomFloat(18, 28); // Target temperature
+                    } else if (deviceTypeName.includes('Ventilador')) {
+                        value = getRandomInt(0, 5); // Speed level 0-5
                     } else {
                         value = getRandomFloat(0, 100); // Generic percentage
                     }
@@ -326,7 +378,8 @@ class DatabaseSeeder {
                     batchData.push({
                         deviceid: device.id,
                         devicevalue: value,
-                        date: date
+                        date: date,
+                        hubid: device.hubid
                     });
                 }
             }

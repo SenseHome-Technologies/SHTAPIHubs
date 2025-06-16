@@ -2,8 +2,6 @@
 const { DataTypes } = require('sequelize');
 const db = require('./config');
 
-const Device = require('./deviceModel');
-
 const Division = db.define('Division', {
     id: {
         type: DataTypes.INTEGER,
@@ -17,21 +15,17 @@ const Division = db.define('Division', {
     icon: {
         type: DataTypes.STRING(255),
     },
+    hubid: {
+        type: DataTypes.UUID,
+        allowNull: false,
+        references: {
+            model: 'hubs',
+            key: 'id',
+        },
+    },
 }, {
     tableName: 'divisions',
     timestamps: false,
-});
-
-// Division has many Device
-Division.hasMany(Device, {
-    foreignKey: 'divisionid',
-    as: 'devices',
-});
-
-// Device belongs to Division
-Device.belongsTo(Division, {
-    foreignKey: 'divisionid',
-    as: 'division',
 });
 
 module.exports = Division;
